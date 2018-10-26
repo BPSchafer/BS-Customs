@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BS Customs", "BS Customs\BS Customs.csproj", "{36088E00-193E-450D-B042-14176DA6D1BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug via Revit Add-In Manager|Any CPU = Debug via Revit Add-In Manager|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Debug via Revit Add-In Manager|Any CPU.ActiveCfg = Debug via Revit Add-In Manager|Any CPU
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Debug via Revit Add-In Manager|Any CPU.Build.0 = Debug via Revit Add-In Manager|Any CPU
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36088E00-193E-450D-B042-14176DA6D1BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {26D5BF09-D21D-41A4-B163-414751EF66D0}
+	EndGlobalSection
+EndGlobal

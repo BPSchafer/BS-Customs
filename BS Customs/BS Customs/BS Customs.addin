@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- BS Customs
+     https://www.bimtrovert.com
+     © BIMtrovert, 2018
+	 
+	 The manifest file. -->
+<RevitAddIns>
+  <AddIn Type="Application">
+  	<AddInId>753f4a11-0aa4-4559-85e1-7016fb15ead6</AddInId>
+    <Name>BS Customs</Name>
+    <Assembly>BS Customs/BS Customs.dll</Assembly>
+    <FullClassName>BIMtrovert.BS_Customs.ExternalApplication</FullClassName>
+    <VendorId>com.bimtrovert.www</VendorId>
+    <VendorDescription>BIMtrovert, https://www.bimtrovert.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
