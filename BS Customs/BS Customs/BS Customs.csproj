@@ -104,6 +104,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SecondPanelCommand.cs" />
+    <Compile Include="SecondPanelCommandAvailability.cs" />
+    <Compile Include="SecondPanelCommand_Work.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExternalApplication.resx">
@@ -117,6 +120,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExternalCommand.ru.resx">
       <DependentUpon>ExternalCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecondPanelCommand.resx">
+      <DependentUpon>SecondPanelCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecondPanelCommand.ru.resx">
+      <DependentUpon>SecondPanelCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecondPanelCommandAvailability.resx">
+      <DependentUpon>SecondPanelCommandAvailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SecondPanelCommandAvailability.ru.resx">
+      <DependentUpon>SecondPanelCommandAvailability.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
