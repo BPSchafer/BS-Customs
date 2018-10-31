@@ -19,7 +19,7 @@ namespace BIMtrovert.BS_Customs.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -109,9 +109,9 @@ namespace BIMtrovert.BS_Customs.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _Button_tooltip_image {
+        internal static System.Drawing.Bitmap _Button_tooltip_image1 {
             get {
-                object obj = ResourceManager.GetObject("_Button_tooltip_image", resourceCulture);
+                object obj = ResourceManager.GetObject("_Button_tooltip_image1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
