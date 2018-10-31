@@ -70,7 +70,7 @@ namespace BIMtrovert.BS_Customs
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
             Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
-            Selection selection = ui_doc.Selection;
+            Selection selection = ui_doc?.Selection;
 
             var tr_name = res_mng.GetString("_transaction_name"
                 );
@@ -86,6 +86,7 @@ namespace BIMtrovert.BS_Customs
                     {
 
                         Reference hasPicked = selection.PickObject(ObjectType.Element);
+                        //ElementId hasPicked = selection.GetElementId();
                         if (hasPicked != null)
                         {
                             ElementId id = hasPicked.ElementId;

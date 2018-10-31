@@ -75,8 +75,7 @@ namespace BIMtrovert.BS_Customs
             try
             {
 
-                UIApplication ui_app = commandData?.Application
-                    ;
+                UIApplication ui_app = commandData?.Application;
                 UIDocument ui_doc = ui_app?.ActiveUIDocument;
                 Application app = ui_app?.Application;
                 Document doc = ui_doc?.Document;

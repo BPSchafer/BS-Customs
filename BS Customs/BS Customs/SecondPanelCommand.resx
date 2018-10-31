@@ -134,7 +134,8 @@
     <comment>The TaskDialog title. It is used by the command stub code.</comment>
   </data>
   <data name="_Button_caption" xml:space="preserve">
-    <value>Filter Whole Project</value>
+    <value>Filter by Parameters 
+Project</value>
     <comment>Button caption.</comment>
   </data>
   <data name="_Button_tooltip_text" xml:space="preserve">
