@@ -33,7 +33,7 @@ using BIMtrovert.BS_Customs.Properties;
 
 namespace BIMtrovert.BS_Customs
 {
-
+    
     public sealed partial class ExternalCommand
     {
 
@@ -71,6 +71,7 @@ namespace BIMtrovert.BS_Customs
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
             Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
+            Selection selection = ui_doc.Selection;
 
             var tr_name = res_mng.GetString("_transaction_name"
                 );
@@ -85,16 +86,16 @@ namespace BIMtrovert.BS_Customs
                         )
                     {
 
-                        // ====================================
-                        // TODO: delete these code rows and put
-                        // your code here.
-                        TaskDialog.Show(res_mng.GetString(
-                            ResourceKeyNames.TaskDialogTitle),
-                            string.Format(res_mng.GetString(
-                                ResourceKeyNames
-                                .TaskDialogMessage), GetType()
-                                .Name));
-                        // ====================================
+                        Reference hasPicked = selection.PickObject(ObjectType.Element);
+                        if (hasPicked != null)
+                        {
+                            ElementId id = hasPicked.ElementId;
+                            Element el = ui_doc.Document.GetElement(id);
+                            ParameterSet parameterSet = el.Parameters;
+
+                            ParameterSelector ps = new ParameterSelector(parameterSet, commandData, id, false);
+                            ps.Show();
+                        }
 
                         return TransactionStatus.Committed ==
                             tr.Commit();
@@ -103,9 +104,8 @@ namespace BIMtrovert.BS_Customs
             }
             catch (Exception ex)
             {
-                /* TODO: Handle the exception here if you need 
-                 * or throw the exception again if you need. */
-                throw ex;
+                TaskDialog.Show("Error", ex.Message);
+                return false;
             }
             finally
             {

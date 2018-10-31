@@ -77,7 +77,7 @@ namespace BIMtrovert.BS_Customs
             {
 
                 TaskDialog.Show(def_res_mng.GetString("_Error")
-                    , ex.Message);
+                    , ex.StackTrace);
 
                 result = Result.Failed;
             }
@@ -136,7 +136,7 @@ namespace BIMtrovert.BS_Customs
             {
 
                 TaskDialog.Show(def_res_mng.GetString("_Error")
-                    , ex.Message);
+                    , ex.Source);
 
                 result = Result.Failed;
             }

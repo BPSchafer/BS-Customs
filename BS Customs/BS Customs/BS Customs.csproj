@@ -82,7 +82,9 @@
     <Reference Include="System" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -93,17 +95,19 @@
     <Compile Include="ExternalCommandAvailability.cs" />
     <Compile Include="ExternalCommand.cs" />
     <Compile Include="ExternalCommand_Work.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.ru.Designer.cs">
-      <DependentUpon>Resources.ru.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="ParameterSelector.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ParameterSelector.Designer.cs">
+      <DependentUpon>ParameterSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RunFilter.cs" />
     <Compile Include="SecondPanelCommand.cs" />
     <Compile Include="SecondPanelCommandAvailability.cs" />
     <Compile Include="SecondPanelCommand_Work.cs" />
@@ -112,25 +116,22 @@
     <EmbeddedResource Include="ExternalApplication.resx">
       <DependentUpon>ExternalApplication.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExternalApplication.ru.resx">
-      <DependentUpon>ExternalApplication.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ExternalCommand.resx">
       <DependentUpon>ExternalCommand.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExternalCommand.ru.resx">
-      <DependentUpon>ExternalCommand.cs</DependentUpon>
+    <EmbeddedResource Include="ParameterSelector.resx">
+      <DependentUpon>ParameterSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RunFilter.resx">
+      <DependentUpon>RunFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RunFilter.ru.resx">
+      <DependentUpon>RunFilter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SecondPanelCommand.resx">
       <DependentUpon>SecondPanelCommand.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SecondPanelCommand.ru.resx">
-      <DependentUpon>SecondPanelCommand.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="SecondPanelCommandAvailability.resx">
-      <DependentUpon>SecondPanelCommandAvailability.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SecondPanelCommandAvailability.ru.resx">
       <DependentUpon>SecondPanelCommandAvailability.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -145,21 +146,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BS Customs.addin" />
+    <None Include="Resources\64x64.png" />
+    <None Include="Resources\magnifyingglass-s.png" />
+    <None Include="Resources\magnifyingglass.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExternalCommandAvailability.resx">
       <DependentUpon>ExternalCommandAvailability.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExternalCommandAvailability.ru.resx">
-      <DependentUpon>ExternalCommandAvailability.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
