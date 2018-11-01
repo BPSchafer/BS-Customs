@@ -95,6 +95,9 @@
     <Compile Include="ExternalCommandAvailability.cs" />
     <Compile Include="ExternalCommand.cs" />
     <Compile Include="ExternalCommand_Work.cs" />
+    <Compile Include="PanelSelectionCommand.cs" />
+    <Compile Include="PanelSelectionCommandAvailability.cs" />
+    <Compile Include="PanelSelectionCommand_Work.cs" />
     <Compile Include="ParameterSelector.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +121,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExternalCommand.resx">
       <DependentUpon>ExternalCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelSelectionCommand.resx">
+      <DependentUpon>PanelSelectionCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelSelectionCommandAvailability.resx">
+      <DependentUpon>PanelSelectionCommandAvailability.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterSelector.resx">
       <DependentUpon>ParameterSelector.cs</DependentUpon>

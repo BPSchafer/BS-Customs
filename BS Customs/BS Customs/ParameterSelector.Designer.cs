@@ -39,22 +39,23 @@
             // 
             // filterButton
             // 
-            this.filterButton.Location = new System.Drawing.Point(12, 12);
+            this.filterButton.Location = new System.Drawing.Point(12, 19);
             this.filterButton.Name = "filterButton";
             this.filterButton.Size = new System.Drawing.Size(153, 62);
-            this.filterButton.TabIndex = 0;
+            this.filterButton.TabIndex = 3;
             this.filterButton.Text = "Filter";
             this.filterButton.UseVisualStyleBackColor = true;
             this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
             // 
             // filterBox
             // 
+            this.filterBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.filterBox.Controls.Add(this.orRadio);
             this.filterBox.Controls.Add(this.andRadio);
             this.filterBox.Location = new System.Drawing.Point(308, 12);
             this.filterBox.Name = "filterBox";
             this.filterBox.Size = new System.Drawing.Size(108, 89);
-            this.filterBox.TabIndex = 1;
+            this.filterBox.TabIndex = 2;
             this.filterBox.TabStop = false;
             this.filterBox.Text = "Filter Type";
             // 
@@ -82,11 +83,17 @@
             // 
             // checksParam
             // 
+            this.checksParam.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.checksParam.BackColor = System.Drawing.SystemColors.Window;
+            this.checksParam.CheckOnClick = true;
+            this.checksParam.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checksParam.FormattingEnabled = true;
-            this.checksParam.Location = new System.Drawing.Point(12, 118);
+            this.checksParam.Location = new System.Drawing.Point(0, 123);
             this.checksParam.Name = "checksParam";
-            this.checksParam.Size = new System.Drawing.Size(404, 571);
-            this.checksParam.TabIndex = 2;
+            this.checksParam.Size = new System.Drawing.Size(428, 554);
+            this.checksParam.TabIndex = 1;
             // 
             // ParameterSelector
             // 
@@ -98,11 +105,11 @@
             this.Controls.Add(this.filterButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(450, 750);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(450, 750);
             this.Name = "ParameterSelector";
-            this.Text = "ParameterSelector";
+            this.Text = "Parameter Selector";
+            this.TopMost = true;
             this.filterBox.ResumeLayout(false);
             this.filterBox.PerformLayout();
             this.ResumeLayout(false);

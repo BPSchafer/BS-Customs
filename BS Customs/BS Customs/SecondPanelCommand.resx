@@ -162,7 +162,7 @@ Project</value>
     <comment>The resource key name which contains the ribbon tab name.</comment>
   </data>
   <data name="_aviability_type" xml:space="preserve">
-    <value>BIMtrovert.BS_Customs.</value>
+    <value>BIMtrovert.BS_Customs.SecondPanelCommandAvailability</value>
     <comment>The type which implements the IExternalCommandAvailability interface.</comment>
   </data>
   <data name="_auto_location" xml:space="preserve">
