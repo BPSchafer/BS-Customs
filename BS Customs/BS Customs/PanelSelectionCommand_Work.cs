@@ -97,7 +97,28 @@ namespace BIMtrovert.BS_Customs
                             String info = "Ids of selected elements in the document are: ";
                             foreach (ElementId id in selectedIds)
                             {
-                                info += "\n\t" + id.IntegerValue;
+                                string parVal = null;
+                                Element elem = ui_doc.Document.GetElement(id);
+                                foreach (Parameter pa in elem.Parameters)
+                                {
+                                    
+                                    if (pa.Definition.Name == "BIMSF_Container")
+                                    {
+                                        parVal = pa.AsValueString();
+                                        /* (pa.AsValueString() != null)
+                                        {
+                                            parVal = pa.AsValueString();
+                                        }
+                                        if (parVal != null)
+                                        {
+                                            info += "\n\t" + parVal;
+
+                                        }*/
+                                    }
+                                    info += "\n\t" + parVal;
+                                }
+                                
+                                    //info += "\n\t" + id.IntegerValue;
                             }
 
                             TaskDialog.Show("Revit", info);
