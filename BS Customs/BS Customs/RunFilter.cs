@@ -67,7 +67,6 @@ namespace BIMtrovert.BS_Customs
                         {
                             elems.Add(e);
                         }
-
                     }
                 }
                 else

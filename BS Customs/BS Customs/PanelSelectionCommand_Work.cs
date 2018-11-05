@@ -86,6 +86,9 @@ namespace BIMtrovert.BS_Customs
                     {
 
                         ICollection<ElementId> selectedIds = selection.GetElementIds();
+                        IList<ElementId> elems = new List<ElementId>();
+                        IList<bool> check = new List<bool>();
+
 
                         if (0 == selectedIds.Count)
                         {
@@ -97,35 +100,72 @@ namespace BIMtrovert.BS_Customs
                             String info = "Ids of selected elements in the document are: ";
                             foreach (ElementId id in selectedIds)
                             {
-                                string parVal = null;
+                                AssemblyInstance assemblyInstance = null;
                                 Element elem = ui_doc.Document.GetElement(id);
                                 foreach (Parameter pa in elem.Parameters)
                                 {
                                     
-                                    if (pa.Definition.Name == "BIMSF_Container")
+                                    if (pa.Definition.Name == "BIMSF_Container" && pa.AsString() != null && elem.get_Parameter(BuiltInParameter.ASSEMBLY_NAME) == null)
                                     {
-                                        parVal = pa.AsValueString();
-                                        /* (pa.AsValueString() != null)
-                                        {
-                                            parVal = pa.AsValueString();
-                                        }
-                                        if (parVal != null)
-                                        {
-                                            info += "\n\t" + parVal;
+                                        ElementId ida = new ElementId(pa.Id.IntegerValue);
+                                        elems.Clear();
 
-                                        }*/
-                                    }
-                                    info += "\n\t" + parVal;
+                                        ParameterValueProvider provider
+                                          = new ParameterValueProvider(ida);
+
+                                        FilterStringRuleEvaluator eval = new FilterStringEquals();
+
+                                        FilterRule rule = new FilterStringRule(provider, eval, elem.get_Parameter(pa.Definition).AsString(),false);
+                                        ElementParameterFilter filter = new ElementParameterFilter( rule );
+                                        FilteredElementCollector fec = new FilteredElementCollector(ui_doc.Document).WhereElementIsNotElementType().WherePasses(filter);
+                                        foreach (Element e in fec)
+                                        {
+                                            elems.Add(e.Id);
+                                            //info += "\n\t" + e.Id.ToString();
+                                        }
+
+
+                                        ElementId categoryId = doc.GetElement(elems.First()).Category.Id; // use category of one of the assembly elements
+                                        if (AssemblyInstance.IsValidNamingCategory(doc, categoryId, elems))
+                                        {
+                                            if (tr.HasStarted())
+                                            {
+
+                                            }
+                                            else
+                                            {
+                                                tr.Start();
+                                            }
+                                            assemblyInstance = AssemblyInstance.Create(doc, elems, categoryId);
+                                            tr.Commit(); // commit the transaction that creates the assembly instance before modifying the instance's name
+
+                                            if (tr.GetStatus() == TransactionStatus.Committed)
+                                            {
+                                                tr.Start("Set Assembly Name");
+                                                assemblyInstance.AssemblyTypeName = elem.get_Parameter(pa.Definition).AsString();
+                                                tr.Commit();
+                                            }
+
+                                            if (assemblyInstance.AllowsAssemblyViewCreation()) // create assembly views for this assembly instance
+                                            {
+                                                if (tr.GetStatus() == TransactionStatus.Committed)
+                                                {
+                                                    tr.Start("View Creation");
+                                                    View3D view3d = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
+                                                    ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
+                                                    tr.Commit();
+                                                }
+                                            }
+                                        }
+                                        //info += "\n\t" + pa.Definition.Name + ": " + pa.AsString();
+                                    }                                   
                                 }
-                                
-                                    //info += "\n\t" + id.IntegerValue;
                             }
 
                             TaskDialog.Show("Revit", info);
                         }
 
-                        return TransactionStatus.Committed ==
-                            tr.Commit();
+                        return true;
                     }
                 }
             }
