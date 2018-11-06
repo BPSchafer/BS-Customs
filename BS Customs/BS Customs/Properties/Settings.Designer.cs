@@ -142,5 +142,173 @@ namespace BIMtrovert.BS_Customs.Properties {
                 this["TemplTemplate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string View3DTemplateFlr {
+            get {
+                return ((string)(this["View3DTemplateFlr"]));
+            }
+            set {
+                this["View3DTemplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ViewPlanTEmplateFlr {
+            get {
+                return ((string)(this["ViewPlanTEmplateFlr"]));
+            }
+            set {
+                this["ViewPlanTEmplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ViewJoistTemplateFlr {
+            get {
+                return ((string)(this["ViewJoistTemplateFlr"]));
+            }
+            set {
+                this["ViewJoistTemplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ViewTrackTemplateFlr {
+            get {
+                return ((string)(this["ViewTrackTemplateFlr"]));
+            }
+            set {
+                this["ViewTrackTemplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TemplTemplateFlr {
+            get {
+                return ((string)(this["TemplTemplateFlr"]));
+            }
+            set {
+                this["TemplTemplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ViewPaTemplateFlr {
+            get {
+                return ((string)(this["ViewPaTemplateFlr"]));
+            }
+            set {
+                this["ViewPaTemplateFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Check3DViewFlr {
+            get {
+                return ((bool)(this["Check3DViewFlr"]));
+            }
+            set {
+                this["Check3DViewFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckedPlanFlr {
+            get {
+                return ((bool)(this["CheckedPlanFlr"]));
+            }
+            set {
+                this["CheckedPlanFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckJoistFlr {
+            get {
+                return ((bool)(this["CheckJoistFlr"]));
+            }
+            set {
+                this["CheckJoistFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckTrackFlr {
+            get {
+                return ((bool)(this["CheckTrackFlr"]));
+            }
+            set {
+                this["CheckTrackFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckPartFlr {
+            get {
+                return ((bool)(this["CheckPartFlr"]));
+            }
+            set {
+                this["CheckPartFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CheckTemplFlr {
+            get {
+                return ((bool)(this["CheckTemplFlr"]));
+            }
+            set {
+                this["CheckTemplFlr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string HorDim {
+            get {
+                return ((string)(this["HorDim"]));
+            }
+            set {
+                this["HorDim"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VertDim {
+            get {
+                return ((string)(this["VertDim"]));
+            }
+            set {
+                this["VertDim"] = value;
+            }
+        }
     }
 }

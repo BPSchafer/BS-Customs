@@ -10,19 +10,28 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using View = System.Windows.Forms.View;
 
 namespace BIMtrovert.BS_Customs
 {
     public partial class AssemblyOptionsForm : System.Windows.Forms.Form
     {
-        View3D selected = null;
-        Autodesk.Revit.DB.View selecting = null;
-        Autodesk.Revit.DB.View selector = null;
-        ViewSchedule selects = null;
-        Element el = null;
-        private string path = @"C:\Users\bscha\AppData\Roaming\Autodesk\Revit\Addins\2018\BS Customs\Solid Wall - A3.rfa";
+        Properties.Settings set = Properties.Settings.Default;
 
+        View3D select3D = null;
+        Autodesk.Revit.DB.View selectEl = null;
+        Autodesk.Revit.DB.View selectPl = null;
+        ViewSchedule selectPa = null;
+        Element el = null;
+
+        View3D select3DF = null;
+        Autodesk.Revit.DB.View selectPlanF = null;
+        Autodesk.Revit.DB.View selectJSF = null;
+        Autodesk.Revit.DB.View selectTSF = null;
+        ViewSchedule selectPaF = null;
+        Element elF = null;
+
+        DimensionType horDim = null;
+        DimensionType vertDim = null;
 
         public AssemblyOptionsForm(ExternalCommandData commandData)
         {
@@ -31,162 +40,111 @@ namespace BIMtrovert.BS_Customs
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
             Autodesk.Revit.ApplicationServices.Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
-            List<View3D> views = new List<View3D>();
-            List<Autodesk.Revit.DB.View> viewing = new List<Autodesk.Revit.DB.View>();
-            List<Autodesk.Revit.DB.View> viewed = new List<Autodesk.Revit.DB.View>();
-            List<ViewSchedule> viewer = new List<ViewSchedule>();
-            IList<Element> title = new List<Element>();
+
+            List<View3D> view3d = new List<View3D>(); 
+            List<Autodesk.Revit.DB.View> viewEl = new List<Autodesk.Revit.DB.View>();
+            List<Autodesk.Revit.DB.View> viewPl = new List<Autodesk.Revit.DB.View>();
+            List<ViewSchedule> viewSc = new List<ViewSchedule>();
             List<string> tlist = new List<string>();
+
+            List<View3D> view3dF = new List<View3D>();
+            List<Autodesk.Revit.DB.View> viewPlF = new List<Autodesk.Revit.DB.View>();
+            List<Autodesk.Revit.DB.View> viewJSF = new List<Autodesk.Revit.DB.View>();
+            List<Autodesk.Revit.DB.View> viewTSF = new List<Autodesk.Revit.DB.View>();
+            List<ViewSchedule> viewScF = new List<ViewSchedule>();
+            List<string> tlistF = new List<string>();
+
+            List<DimensionType> dimL = new List<DimensionType>();
+            List<DimensionType> VertDimL = new List<DimensionType>();
 
             FilteredElementCollector ViewCollector3D = new FilteredElementCollector(doc).OfClass(typeof(View3D));
             FilteredElementCollector ViewCollectorEl = new FilteredElementCollector(doc).OfClass(typeof(Autodesk.Revit.DB.View));
-            FilteredElementCollector ViewCollectorPl = new FilteredElementCollector(doc).OfClass(typeof(Autodesk.Revit.DB.View));
             FilteredElementCollector ViewCollectorSc = new FilteredElementCollector(doc).OfClass(typeof(ViewSchedule));
             FilteredElementCollector tempCollector = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_TitleBlocks);
-            title = tempCollector.ToElements();
-            foreach (View3D v3d in ViewCollector3D)
-            {
-                if (v3d.IsTemplate)
-                {
-                    views.Add(v3d);
-                }
+            FilteredElementCollector dimCollector = new FilteredElementCollector(doc).OfClass(typeof(DimensionType));
 
-            }
-            foreach (Autodesk.Revit.DB.View vEl in ViewCollectorEl)
-            {
-                if (vEl.IsTemplate)
-                {
-                    viewing.Add(vEl);
-                }
 
-            }
-            foreach (Autodesk.Revit.DB.View vPl in ViewCollectorPl)
-            {
-                if (vPl.IsTemplate)
-                {
-                    viewed.Add(vPl);
-                }
+            addList(ViewCollector3D, view3d);
+            addList(ViewCollectorEl, viewEl);
+            addList(ViewCollectorEl, viewPl);
+            addList(ViewCollectorSc, viewSc);
+            addList(tempCollector, tlist);
 
-            }
-            foreach (ViewSchedule vSc in ViewCollectorSc)
-            {
-                if (vSc.IsTemplate)
-                {
-                    viewer.Add(vSc);
-                }
+            addList(ViewCollector3D, view3dF);
+            addList(ViewCollectorEl, viewPlF);
+            addList(ViewCollectorEl, viewJSF);
+            addList(ViewCollectorEl, viewTSF);
+            addList(ViewCollectorSc, viewScF);
+            addList(tempCollector, tlistF);
 
-            }
-            foreach (Element i in title)
-            {
-                tlist.Add(i.Name);
-            }
+            addList(dimCollector, dimL);
+            addList(dimCollector, VertDimL);
 
-            if (views != null)
-            {
-                v3dCombo.DataSource = views;
-                v3dCombo.DisplayMember = "Name";
 
-                if (Properties.Settings.Default.View3DTemplate != "")
-                {
-                    foreach (View3D item in ViewCollector3D)
-                    {
-                        if (item.Name == Properties.Settings.Default.View3DTemplate)
-                        {
-                            v3dCombo.SelectedIndex = v3dCombo.FindStringExact(item.Name);
-                        }
-                    }
-                    
-                }
-                
-            }
-            if (viewing != null)
-            {
-                vElCombo.DataSource = viewing;
-                vElCombo.DisplayMember = "Name";
+            popCombo(v3dCombo, view3d, ViewCollector3D, set.View3DTemplate);
 
-                if (Properties.Settings.Default.ViewElTemplate != "")
-                {
-                    foreach (Autodesk.Revit.DB.View item in ViewCollectorEl)
-                    {
-                        if (item.Name == Properties.Settings.Default.ViewElTemplate)
-                        {
-                            vElCombo.SelectedIndex = vElCombo.FindStringExact(item.Name);
-                        }
-                    }
+            popCombo(vElCombo, viewEl, ViewCollectorEl, set.ViewElTemplate);
 
-                }
+            popCombo(vPlCombo,viewPl,ViewCollectorEl, set.ViewPlTemplate);
 
-            }
+            popCombo(vPaCombo, viewSc, ViewCollectorSc, set.ViewPaTemplate);
 
-            if (viewed != null)
-            {
-                vPlCombo.DataSource = viewed;
-                vPlCombo.DisplayMember = "Name";
+            popCombo(TemplCombo, tlist, tempCollector, set.TemplTemplate);
 
-                if (Properties.Settings.Default.ViewPlTemplate != "")
-                {
-                    foreach (Autodesk.Revit.DB.View item in ViewCollectorEl)
-                    {
-                        if (item.Name == Properties.Settings.Default.ViewPlTemplate)
-                        {
-                            vPlCombo.SelectedIndex = vPlCombo.FindStringExact(item.Name);
-                        }
-                    }
 
-                }
+            popCombo(v3DComboFlr, view3dF, ViewCollector3D, set.View3DTemplateFlr);
 
-            }
+            popCombo(vPlComboFlr, viewPlF, ViewCollectorEl, set.ViewPlanTEmplateFlr);
 
-            if (viewer != null)
-            {
-                vPaCombo.DataSource = viewer;
-                vPaCombo.DisplayMember = "Name";
+            popCombo(JSComboFlr, viewJSF, ViewCollectorEl, set.ViewJoistTemplateFlr);
 
-                if (Properties.Settings.Default.ViewPaTemplate != "")
-                {
-                    foreach (ViewSchedule item in ViewCollectorSc)
-                    {
-                        if (item.Name == Properties.Settings.Default.ViewPaTemplate)
-                        {
-                            vPaCombo.SelectedIndex = vPaCombo.FindStringExact(item.Name);
-                        }
-                    }
+            popCombo(TSComboFlr, viewTSF, ViewCollectorEl, set.ViewTrackTemplateFlr);
 
-                }
+            popCombo(PaComboFlr, viewScF, ViewCollectorSc, set.ViewPaTemplateFlr);
 
-            }
+            popCombo(ShComboFlr, tlistF, tempCollector, set.TemplTemplateFlr);
 
-            if (tlist != null)
-            {
-                TemplCombo.DataSource = title;
-                TemplCombo.DisplayMember = "Name";
 
-                if (Properties.Settings.Default.TemplTemplate != "")
-                {
-                    foreach  (Element i in title)
-                    {
-                        if (i.Name == Properties.Settings.Default.TemplTemplate)
-                        {
-                            TemplCombo.SelectedIndex = TemplCombo.FindStringExact(i.Name);
-                        }
-                    }
-                }
-            }
+            popCombo(HorCombo, dimL, dimCollector, set.HorDim);
+            popCombo(VertCombo, VertDimL, dimCollector, set.VertDim);
         }
 
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            selected = (View3D)v3dCombo.SelectedValue;
-            selecting = (Autodesk.Revit.DB.View)vElCombo.SelectedValue;
-            selector = (Autodesk.Revit.DB.View)vPlCombo.SelectedValue;
-            selects = (ViewSchedule)vPaCombo.SelectedValue;
-            el = (Element)TemplCombo.SelectedValue; 
-            Properties.Settings.Default.View3DTemplate = selected.Name;
-            Properties.Settings.Default.ViewElTemplate = selecting.Name;
-            Properties.Settings.Default.ViewPlTemplate = selector.Name;
-            Properties.Settings.Default.ViewPaTemplate = selects.Name;
-            Properties.Settings.Default.TemplTemplate = el.Name;
-            Properties.Settings.Default.Save();
+            select3D = (View3D)v3dCombo.SelectedValue;
+            selectEl = (Autodesk.Revit.DB.View)vElCombo.SelectedValue;
+            selectPl = (Autodesk.Revit.DB.View)vPlCombo.SelectedValue;
+            selectPa = (ViewSchedule)vPaCombo.SelectedValue;
+            el = (Element)TemplCombo.SelectedValue;
+
+            select3DF = (View3D)v3DComboFlr.SelectedValue;
+            selectPlanF = (Autodesk.Revit.DB.View)vPlComboFlr.SelectedValue;
+            selectJSF = (Autodesk.Revit.DB.View)JSComboFlr.SelectedValue;
+            selectTSF = (Autodesk.Revit.DB.View)TSComboFlr.SelectedValue;
+            selectPaF = (ViewSchedule)PaComboFlr.SelectedValue;
+            elF = (Element)ShComboFlr.SelectedValue;
+
+            horDim = (DimensionType)HorCombo.SelectedValue;
+            vertDim = (DimensionType)VertCombo.SelectedValue;
+
+
+            set.View3DTemplate = select3D.Name;
+            set.ViewElTemplate = selectEl.Name;
+            set.ViewPlTemplate = selectPl.Name;
+            set.ViewPaTemplate = selectPa.Name;
+            set.TemplTemplate = el.Name;
+
+            set.View3DTemplateFlr = select3DF.Name;
+            set.ViewPlanTEmplateFlr = selectPlanF.Name;
+            set.ViewJoistTemplateFlr = selectJSF.Name;
+            set.ViewTrackTemplateFlr = selectTSF.Name;
+            set.ViewPaTemplateFlr = selectPaF.Name;
+            set.TemplTemplateFlr = elF.Name;
+
+            set.HorDim = horDim.Name;
+            set.VertDim = vertDim.Name;
+
+            set.Save();
             Close();
         }
 
@@ -194,6 +152,170 @@ namespace BIMtrovert.BS_Customs
         {
             Properties.Settings.Default.Reload();
             Close();
+        }
+
+        private void popCombo(System.Windows.Forms.ComboBox v3dC, List<View3D> views, FilteredElementCollector ViewC3D, string settings)
+        {
+            if (views != null)
+            {
+                v3dC.DataSource = views;
+                v3dC.DisplayMember = "Name";
+
+                if (settings != "")
+                {
+                    foreach (View3D item in ViewC3D)
+                    {
+                        if (item.Name == settings)
+                        {
+                            v3dC.SelectedIndex = v3dC.FindStringExact(item.Name);
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        private void popCombo(System.Windows.Forms.ComboBox Combo, List<Autodesk.Revit.DB.View> viewt, FilteredElementCollector ViewCEl, string settings)
+        {
+            if (viewt != null)
+            {
+                Combo.DataSource = viewt;
+                Combo.DisplayMember = "Name";
+
+                if (settings != "")
+                {
+                    foreach (Autodesk.Revit.DB.View item in ViewCEl)
+                    {
+                        if (item.Name == settings)
+                        {
+                            Combo.SelectedIndex = Combo.FindStringExact(item.Name);
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<ViewSchedule> view, FilteredElementCollector ViewCollectSc, string settings)
+        {
+            if (view != null)
+            {
+                vCombo.DataSource = view;
+                vCombo.DisplayMember = "Name";
+
+                if (settings != "")
+                {
+                    foreach (ViewSchedule item in ViewCollectSc)
+                    {
+                        if (item.Name == settings)
+                        {
+                            vCombo.SelectedIndex = vCombo.FindStringExact(item.Name);
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<DimensionType> view, FilteredElementCollector ViewCollectSc, string settings)
+        {
+            if (view != null)
+            {
+                vCombo.DataSource = view;
+                vCombo.DisplayMember = "Name";
+
+                if (settings != "")
+                {
+                    foreach (DimensionType item in ViewCollectSc)
+                    {
+                        if (item.Name == settings)
+                        {
+                            vCombo.SelectedIndex = vCombo.FindStringExact(item.Name);
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+        private void popCombo(System.Windows.Forms.ComboBox TCombo, List<string> listt, FilteredElementCollector tCollector, string settings)
+        {
+            IList<Element> title = new List<Element>();
+            title = tCollector.ToElements();
+            if (listt != null)
+            {
+                TCombo.DataSource = title;
+                TCombo.DisplayMember = "Name";
+
+                if (settings != "")
+                {
+                    foreach (Element i in title)
+                    {
+                        if (i.Name == settings)
+                        {
+                            TCombo.SelectedIndex = TemplCombo.FindStringExact(i.Name);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void addList(FilteredElementCollector fec, List<View3D> views)
+        {
+            foreach (View3D v3d in fec)
+            {
+                if (v3d.IsTemplate)
+                {
+                    views.Add(v3d);
+                }
+
+            }
+        }
+
+        private void addList(FilteredElementCollector fec, List<Autodesk.Revit.DB.View> views)
+        {
+            foreach (Autodesk.Revit.DB.View v3d in fec)
+            {
+                if (v3d.IsTemplate)
+                {
+                    views.Add(v3d);
+                }
+
+            }
+        }
+
+        private void addList(FilteredElementCollector fec, List<ViewSchedule> views)
+        {
+            foreach (ViewSchedule v3d in fec)
+            {
+                if (v3d.IsTemplate)
+                {
+                    views.Add(v3d);
+                }
+
+            }
+        }
+
+        private void addList(FilteredElementCollector fec, List<string> views)
+        {
+            IList<Element> title = new List<Element>();
+            title = fec.ToElements();
+            foreach (Element i in title)
+            {
+                views.Add(i.Name);
+            }
+        }
+
+        private void addList(FilteredElementCollector fec, List<DimensionType> views)
+        {
+            foreach (DimensionType v3d in fec)
+            {                
+                views.Add(v3d);
+            }
         }
 
     }
