@@ -151,8 +151,115 @@ namespace BIMtrovert.BS_Customs
                                                 if (tr.GetStatus() == TransactionStatus.Committed)
                                                 {
                                                     tr.Start("View Creation");
-                                                    View3D view3d = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
+
+                                                    if (Properties.Settings.Default.View3DTemplate != "")
+                                                    {
+                                                        try
+                                                        {
+                                                            FilteredElementCollector ViewCollector3D = new FilteredElementCollector(doc).OfClass(typeof(View3D));
+                                                            foreach (View3D item in ViewCollector3D)
+                                                            {
+                                                                if (item.Name == Properties.Settings.Default.View3DTemplate)
+                                                                {
+                                                                    View3D view3d = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id, item.Id,true);
+
+                                                                }
+                                                            }
+
+                                                        }
+                                                        catch(Exception ex)
+                                                        {
+                                                            TaskDialog.Show("Error",ex.Message);
+                                                            break;
+                                                        }
+                                                    }
+                                                    
+                                                    Autodesk.Revit.DB.View ElView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
+                                                    /*if (Properties.Settings.Default.ViewElTemplate != "")
+                                                    {
+                                                        try
+                                                        {
+                                                            FilteredElementCollector ViewCollectorEl = new FilteredElementCollector(doc).OfClass(typeof(Autodesk.Revit.DB.View));
+                                                            foreach (View3D item in ViewCollectorEl)
+                                                            {
+                                                                if (item.Name == Properties.Settings.Default.ViewElTemplate)
+                                                                {
+                                                                    ElView.ViewTemplateId = item.Id;
+                                                                }
+                                                            }
+
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            TaskDialog.Show("Error", ex.Message);
+                                                            break;
+                                                        }
+                                                    }*/
+                                                    Autodesk.Revit.DB.View PlView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
+                                                    /*if (Properties.Settings.Default.ViewPlTemplate != "")
+                                                    {
+                                                        try
+                                                        {
+                                                            FilteredElementCollector ViewCollectorPl = new FilteredElementCollector(doc).OfClass(typeof(Autodesk.Revit.DB.View));
+                                                            foreach (View3D item in ViewCollectorPl)
+                                                            {
+                                                                if (item.Name == Properties.Settings.Default.ViewPlTemplate)
+                                                                {
+                                                                    PlView.ViewTemplateId = item.Id;
+                                                                }
+                                                            }
+
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            TaskDialog.Show("Error", ex.Message);
+                                                            break;
+                                                        }
+                                                    }*/
+
                                                     ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
+                                                    /*if (Properties.Settings.Default.ViewPaTemplate != "")
+                                                    {
+                                                        try
+                                                        {
+                                                            FilteredElementCollector ViewCollectorPa = new FilteredElementCollector(doc).OfClass(typeof(ViewSchedule));
+                                                            foreach (View3D item in ViewCollectorPa)
+                                                            {
+                                                                if (item.Name == Properties.Settings.Default.ViewPaTemplate)
+                                                                {
+                                                                    partList.ViewTemplateId = item.Id;
+                                                                }
+                                                            }
+
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            TaskDialog.Show("Error", ex.Message);
+                                                            break;
+                                                        }
+                                                    }*/
+                                                    if (Properties.Settings.Default.TemplTemplate != "")
+                                                    {
+                                                        try
+                                                        {
+                                                            FilteredElementCollector tempCollector = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_TitleBlocks);
+                                                            foreach (Element item in tempCollector)
+                                                            {
+                                                                if (item.Name == Properties.Settings.Default.TemplTemplate)
+                                                                {
+                                                                    ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, item.Id);
+                                                                    sheet.SheetNumber = elem.get_Parameter(pa.Definition).AsString();
+                                                                    sheet.Name = "Framing";
+                                                                }
+                                                            }
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            TaskDialog.Show("Error", ex.Message);
+                                                            break;
+                                                        }
+                                                    }
+                                                    //ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc,assemblyInstance.Id)
                                                     tr.Commit();
                                                 }
                                             }

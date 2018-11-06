@@ -91,6 +91,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyOptionsCommand.cs" />
+    <Compile Include="AssemblyOptionsCommandAvailability.cs" />
+    <Compile Include="AssemblyOptionsCommand_Work.cs" />
+    <Compile Include="AssemblyOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AssemblyOptionsForm.Designer.cs">
+      <DependentUpon>AssemblyOptionsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExternalApplication.cs" />
     <Compile Include="ExternalCommandAvailability.cs" />
     <Compile Include="ExternalCommand.cs" />
@@ -110,12 +119,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="RunFilter.cs" />
     <Compile Include="SecondPanelCommand.cs" />
     <Compile Include="SecondPanelCommandAvailability.cs" />
     <Compile Include="SecondPanelCommand_Work.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AssemblyOptionsCommand.resx">
+      <DependentUpon>AssemblyOptionsCommand.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AssemblyOptionsCommandAvailability.resx">
+      <DependentUpon>AssemblyOptionsCommandAvailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AssemblyOptionsForm.resx">
+      <DependentUpon>AssemblyOptionsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExternalApplication.resx">
       <DependentUpon>ExternalApplication.cs</DependentUpon>
     </EmbeddedResource>
@@ -155,6 +178,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BS Customs.addin" />
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Resources\64x64.png" />
     <None Include="Resources\magnifyingglass-s.png" />
     <None Include="Resources\magnifyingglass.png" />
