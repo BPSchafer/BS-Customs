@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using View = System.Windows.Forms.View;
 
 namespace BIMtrovert.BS_Customs
 {
@@ -19,6 +21,9 @@ namespace BIMtrovert.BS_Customs
         Autodesk.Revit.DB.View selector = null;
         ViewSchedule selects = null;
         Element el = null;
+        private string path = @"C:\Users\bscha\AppData\Roaming\Autodesk\Revit\Addins\2018\BS Customs\Solid Wall - A3.rfa";
+
+
         public AssemblyOptionsForm(ExternalCommandData commandData)
         {
             InitializeComponent();
@@ -32,7 +37,6 @@ namespace BIMtrovert.BS_Customs
             List<ViewSchedule> viewer = new List<ViewSchedule>();
             IList<Element> title = new List<Element>();
             List<string> tlist = new List<string>();
-            
 
             FilteredElementCollector ViewCollector3D = new FilteredElementCollector(doc).OfClass(typeof(View3D));
             FilteredElementCollector ViewCollectorEl = new FilteredElementCollector(doc).OfClass(typeof(Autodesk.Revit.DB.View));
@@ -191,5 +195,6 @@ namespace BIMtrovert.BS_Customs
             Properties.Settings.Default.Reload();
             Close();
         }
+
     }
 }

@@ -174,8 +174,8 @@ namespace BIMtrovert.BS_Customs
                                                         }
                                                     }
                                                     
-                                                    Autodesk.Revit.DB.View ElView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
-                                                    /*if (Properties.Settings.Default.ViewElTemplate != "")
+                                                    
+                                                    if (Properties.Settings.Default.ViewElTemplate != "")
                                                     {
                                                         try
                                                         {
@@ -184,7 +184,7 @@ namespace BIMtrovert.BS_Customs
                                                             {
                                                                 if (item.Name == Properties.Settings.Default.ViewElTemplate)
                                                                 {
-                                                                    ElView.ViewTemplateId = item.Id;
+                                                                    View ElView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront, item.Id,true);
                                                                 }
                                                             }
 
@@ -194,9 +194,9 @@ namespace BIMtrovert.BS_Customs
                                                             TaskDialog.Show("Error", ex.Message);
                                                             break;
                                                         }
-                                                    }*/
-                                                    Autodesk.Revit.DB.View PlView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
-                                                    /*if (Properties.Settings.Default.ViewPlTemplate != "")
+                                                    }
+                                                    
+                                                    if (Properties.Settings.Default.ViewPlTemplate != "")
                                                     {
                                                         try
                                                         {
@@ -205,7 +205,7 @@ namespace BIMtrovert.BS_Customs
                                                             {
                                                                 if (item.Name == Properties.Settings.Default.ViewPlTemplate)
                                                                 {
-                                                                    PlView.ViewTemplateId = item.Id;
+                                                                    View PlView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop, item.Id, true);
                                                                 }
                                                             }
 
@@ -215,10 +215,10 @@ namespace BIMtrovert.BS_Customs
                                                             TaskDialog.Show("Error", ex.Message);
                                                             break;
                                                         }
-                                                    }*/
+                                                    }
 
-                                                    ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
-                                                    /*if (Properties.Settings.Default.ViewPaTemplate != "")
+                                                    
+                                                    if (Properties.Settings.Default.ViewPaTemplate != "")
                                                     {
                                                         try
                                                         {
@@ -227,7 +227,7 @@ namespace BIMtrovert.BS_Customs
                                                             {
                                                                 if (item.Name == Properties.Settings.Default.ViewPaTemplate)
                                                                 {
-                                                                    partList.ViewTemplateId = item.Id;
+                                                                    ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id, item.Id, true);
                                                                 }
                                                             }
 
@@ -237,7 +237,7 @@ namespace BIMtrovert.BS_Customs
                                                             TaskDialog.Show("Error", ex.Message);
                                                             break;
                                                         }
-                                                    }*/
+                                                    }
                                                     if (Properties.Settings.Default.TemplTemplate != "")
                                                     {
                                                         try
