@@ -41,6 +41,8 @@ namespace BIMtrovert.BS_Customs
             Autodesk.Revit.ApplicationServices.Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
 
+            ProjectSettingsStorage pstore = new ProjectSettingsStorage();
+
             List<View3D> view3d = new List<View3D>(); 
             List<Autodesk.Revit.DB.View> viewEl = new List<Autodesk.Revit.DB.View>();
             List<Autodesk.Revit.DB.View> viewPl = new List<Autodesk.Revit.DB.View>();
@@ -81,15 +83,15 @@ namespace BIMtrovert.BS_Customs
             addList(dimCollector, VertDimL);
 
 
-            popCombo(v3dCombo, view3d, ViewCollector3D, set.View3DTemplate);
+            popCombo(v3dCombo, view3d, ViewCollector3D, pstore.ReadSettings(doc).View3DTemplate, doc);
 
-            popCombo(vElCombo, viewEl, ViewCollectorEl, set.ViewElTemplate);
+            popCombo(vElCombo, viewEl, ViewCollectorEl, pstore.ReadSettings(doc).ViewElTemplate, doc);
 
-            popCombo(vPlCombo,viewPl,ViewCollectorEl, set.ViewPlTemplate);
+            popCombo(vPlCombo,viewPl,ViewCollectorEl, pstore.ReadSettings(doc).ViewPlTemplate, doc);
 
-            popCombo(vPaCombo, viewSc, ViewCollectorSc, set.ViewPaTemplate);
+            popCombo(vPaCombo, viewSc, ViewCollectorSc, pstore.ReadSettings(doc).ViewPaTemplate, doc);
 
-            popCombo(TemplCombo, tlist, tempCollector, set.TemplTemplate);
+            popCombo(TemplCombo, tlist, tempCollector, pstore.ReadSettings(doc).TemplateTemplate, doc);
 
 
             popCombo(v3DComboFlr, view3dF, ViewCollector3D, set.View3DTemplateFlr);
@@ -154,18 +156,18 @@ namespace BIMtrovert.BS_Customs
             Close();
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox v3dC, List<View3D> views, FilteredElementCollector ViewC3D, string settings)
+        private void popCombo(System.Windows.Forms.ComboBox v3dC, List<View3D> views, FilteredElementCollector ViewC3D, ElementId settings, Document doc)
         {
             if (views != null)
             {
                 v3dC.DataSource = views;
                 v3dC.DisplayMember = "Name";
 
-                if (settings != "")
+                if (doc.GetElement(settings) != null)
                 {
                     foreach (View3D item in ViewC3D)
                     {
-                        if (item.Name == settings)
+                        if (item.Name == doc.GetElement(settings).Name)
                         {
                             v3dC.SelectedIndex = v3dC.FindStringExact(item.Name);
                         }
@@ -176,18 +178,18 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox Combo, List<Autodesk.Revit.DB.View> viewt, FilteredElementCollector ViewCEl, string settings)
+        private void popCombo(System.Windows.Forms.ComboBox Combo, List<Autodesk.Revit.DB.View> viewt, FilteredElementCollector ViewCEl, ElementId settings, Document doc)
         {
             if (viewt != null)
             {
                 Combo.DataSource = viewt;
                 Combo.DisplayMember = "Name";
 
-                if (settings != "")
+                if (doc.GetElement(settings) != null)
                 {
                     foreach (Autodesk.Revit.DB.View item in ViewCEl)
                     {
-                        if (item.Name == settings)
+                        if (item.Name == doc.GetElement(settings).Name)
                         {
                             Combo.SelectedIndex = Combo.FindStringExact(item.Name);
                         }
@@ -198,18 +200,18 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<ViewSchedule> view, FilteredElementCollector ViewCollectSc, string settings)
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<ViewSchedule> view, FilteredElementCollector ViewCollectSc, ElementId settings, Document doc)
         {
             if (view != null)
             {
                 vCombo.DataSource = view;
                 vCombo.DisplayMember = "Name";
 
-                if (settings != "")
+                if (doc.GetElement(settings) != null)
                 {
                     foreach (ViewSchedule item in ViewCollectSc)
                     {
-                        if (item.Name == settings)
+                        if (item.Name == doc.GetElement(settings).Name)
                         {
                             vCombo.SelectedIndex = vCombo.FindStringExact(item.Name);
                         }
@@ -220,18 +222,18 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<DimensionType> view, FilteredElementCollector ViewCollectSc, string settings)
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<DimensionType> view, FilteredElementCollector ViewCollectSc, ElementId settings, Document doc)
         {
             if (view != null)
             {
                 vCombo.DataSource = view;
                 vCombo.DisplayMember = "Name";
 
-                if (settings != "")
+                if (doc.GetElement(settings) != null)
                 {
                     foreach (DimensionType item in ViewCollectSc)
                     {
-                        if (item.Name == settings)
+                        if (item.Name == doc.GetElement(settings).Name)
                         {
                             vCombo.SelectedIndex = vCombo.FindStringExact(item.Name);
                         }
@@ -242,7 +244,7 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox TCombo, List<string> listt, FilteredElementCollector tCollector, string settings)
+        private void popCombo(System.Windows.Forms.ComboBox TCombo, List<string> listt, FilteredElementCollector tCollector, ElementId settings, Document doc)
         {
             IList<Element> title = new List<Element>();
             title = tCollector.ToElements();
@@ -251,11 +253,11 @@ namespace BIMtrovert.BS_Customs
                 TCombo.DataSource = title;
                 TCombo.DisplayMember = "Name";
 
-                if (settings != "")
+                if (doc.GetElement(settings) != null)
                 {
                     foreach (Element i in title)
                     {
-                        if (i.Name == settings)
+                        if (i.Name == doc.GetElement(settings).Name)
                         {
                             TCombo.SelectedIndex = TemplCombo.FindStringExact(i.Name);
                         }
