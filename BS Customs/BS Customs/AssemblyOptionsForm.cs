@@ -15,7 +15,6 @@ namespace BIMtrovert.BS_Customs
 {
     public partial class AssemblyOptionsForm : System.Windows.Forms.Form
     {
-        Properties.Settings set = Properties.Settings.Default;
 
         View3D select3D = null;
         Autodesk.Revit.DB.View selectEl = null;
@@ -32,16 +31,19 @@ namespace BIMtrovert.BS_Customs
 
         DimensionType horDim = null;
         DimensionType vertDim = null;
+        UIApplication ui_app = null;
+        ProjectSettings projectSettings = new ProjectSettings();
+        ProjectSettingsStorage pstore = new ProjectSettingsStorage();
 
         public AssemblyOptionsForm(ExternalCommandData commandData)
         {
             InitializeComponent();
-            UIApplication ui_app = commandData.Application;
+            ui_app = commandData.Application;
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
             Autodesk.Revit.ApplicationServices.Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
 
-            ProjectSettingsStorage pstore = new ProjectSettingsStorage();
+            
 
             List<View3D> view3d = new List<View3D>(); 
             List<Autodesk.Revit.DB.View> viewEl = new List<Autodesk.Revit.DB.View>();
@@ -83,36 +85,135 @@ namespace BIMtrovert.BS_Customs
             addList(dimCollector, VertDimL);
 
 
-            popCombo(v3dCombo, view3d, ViewCollector3D, pstore.ReadSettings(doc).View3DTemplate, doc);
+            //popCombo(v3dCombo, view3d, ViewCollector3D, doc);
+            try
+            {
+                popCombo(v3dCombo, view3d, ViewCollector3D, doc, pstore.ReadSettings(doc)?.View3DTemplate);
+            }
+            catch (Exception)
+            {
+                popCombo(v3dCombo, view3d, ViewCollector3D, doc);
 
-            popCombo(vElCombo, viewEl, ViewCollectorEl, pstore.ReadSettings(doc).ViewElTemplate, doc);
+            }
 
-            popCombo(vPlCombo,viewPl,ViewCollectorEl, pstore.ReadSettings(doc).ViewPlTemplate, doc);
+            try
+            {
+                popCombo(vElCombo, viewEl, ViewCollectorEl, doc, pstore.ReadSettings(doc)?.ViewElTemplate);
+            }
+            catch (Exception)
+            {
+                popCombo(vElCombo, viewEl, ViewCollectorEl, doc);
+            }
 
-            popCombo(vPaCombo, viewSc, ViewCollectorSc, pstore.ReadSettings(doc).ViewPaTemplate, doc);
+            try
+            {
+                popCombo(vPlCombo, viewPl, ViewCollectorEl, doc, pstore.ReadSettings(doc)?.ViewPlTemplate);
+            }
+            catch (Exception)
+            {
+                popCombo(vPlCombo, viewPl, ViewCollectorEl, doc);
+            }
 
-            popCombo(TemplCombo, tlist, tempCollector, pstore.ReadSettings(doc).TemplateTemplate, doc);
+            try
+            {
+                popCombo(vPaCombo, viewSc, ViewCollectorSc, doc, pstore.ReadSettings(doc)?.ViewPaTemplate);
+            }
+            catch (Exception)
+            {
+                popCombo(vPaCombo, viewSc, ViewCollectorSc, doc);
+            }
+
+            try
+            {
+                popCombo(TemplCombo, tlist, tempCollector, doc, pstore.ReadSettings(doc)?.TemplateTemplate);
+            }
+            catch (Exception)
+            {
+                popCombo(TemplCombo, tlist, tempCollector, doc);
+            }
 
 
-            popCombo(v3DComboFlr, view3dF, ViewCollector3D, set.View3DTemplateFlr);
+            try
+            {
+                popCombo(v3DComboFlr, view3dF, ViewCollector3D, doc, pstore.ReadSettings(doc)?.View3DTemplateFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(v3DComboFlr, view3dF, ViewCollector3D, doc);
+            }
 
-            popCombo(vPlComboFlr, viewPlF, ViewCollectorEl, set.ViewPlanTEmplateFlr);
+            try
+            {
+                popCombo(vPlComboFlr, viewPlF, ViewCollectorEl, doc, pstore.ReadSettings(doc)?.ViewPlanTemplateFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(vPlComboFlr, viewPlF, ViewCollectorEl, doc);
+            }
 
-            popCombo(JSComboFlr, viewJSF, ViewCollectorEl, set.ViewJoistTemplateFlr);
+            try
+            {
+                popCombo(JSComboFlr, viewJSF, ViewCollectorEl, doc, pstore.ReadSettings(doc)?.ViewJoistTemplateFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(JSComboFlr, viewJSF, ViewCollectorEl, doc);
+            }
 
-            popCombo(TSComboFlr, viewTSF, ViewCollectorEl, set.ViewTrackTemplateFlr);
+            try
+            {
+                popCombo(TSComboFlr, viewTSF, ViewCollectorEl, doc, pstore.ReadSettings(doc)?.ViewTrackTemplateFrl);
+            }
+            catch (Exception)
+            {
+                popCombo(TSComboFlr, viewTSF, ViewCollectorEl, doc);
+            }
 
-            popCombo(PaComboFlr, viewScF, ViewCollectorSc, set.ViewPaTemplateFlr);
+            try
+            {
+                popCombo(PaComboFlr, viewScF, ViewCollectorSc, doc, pstore.ReadSettings(doc)?.ViewPaTemplateFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(PaComboFlr, viewScF, ViewCollectorSc, doc);
+            }
 
-            popCombo(ShComboFlr, tlistF, tempCollector, set.TemplTemplateFlr);
+            try
+            {
+                popCombo(ShComboFlr, tlistF, tempCollector, doc, pstore.ReadSettings(doc)?.TemplateTemplateFrl);
+            }
+            catch (Exception)
+            {
+                popCombo(ShComboFlr, tlistF, tempCollector, doc);
+            }
 
 
-            popCombo(HorCombo, dimL, dimCollector, set.HorDim);
-            popCombo(VertCombo, VertDimL, dimCollector, set.VertDim);
+            try
+            {
+                popCombo(HorCombo, dimL, dimCollector, doc, pstore.ReadSettings(doc)?.HorizontalDimFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(HorCombo, dimL, dimCollector, doc);
+            }
+
+            try
+            {
+                popCombo(VertCombo, VertDimL, dimCollector, doc, pstore.ReadSettings(doc)?.VerticalDimFlr);
+            }
+            catch (Exception)
+            {
+                popCombo(VertCombo, VertDimL, dimCollector, doc);
+            }
+            
         }
 
         private void SaveBtn_Click(object sender, EventArgs e)
         {
+            UIDocument ui_doc = ui_app?.ActiveUIDocument;
+            Autodesk.Revit.ApplicationServices.Application app = ui_app?.Application;
+            Document doc = ui_doc?.Document;
+
             select3D = (View3D)v3dCombo.SelectedValue;
             selectEl = (Autodesk.Revit.DB.View)vElCombo.SelectedValue;
             selectPl = (Autodesk.Revit.DB.View)vPlCombo.SelectedValue;
@@ -129,41 +230,43 @@ namespace BIMtrovert.BS_Customs
             horDim = (DimensionType)HorCombo.SelectedValue;
             vertDim = (DimensionType)VertCombo.SelectedValue;
 
+            projectSettings.View3DTemplate = select3D.Id;
+            projectSettings.ViewElTemplate = selectEl.Id;
+            projectSettings.ViewPlTemplate = selectPl.Id;
+            projectSettings.ViewPaTemplate = selectPa.Id;
+            projectSettings.TemplateTemplate = el.Id;
 
-            set.View3DTemplate = select3D.Name;
-            set.ViewElTemplate = selectEl.Name;
-            set.ViewPlTemplate = selectPl.Name;
-            set.ViewPaTemplate = selectPa.Name;
-            set.TemplTemplate = el.Name;
+            projectSettings.View3DTemplateFlr = select3DF.Id;
+            projectSettings.ViewPlanTemplateFlr = selectPlanF.Id;
+            projectSettings.ViewJoistTemplateFlr = selectJSF.Id;
+            projectSettings.ViewTrackTemplateFrl = selectTSF.Id;
+            projectSettings.ViewPaTemplateFlr = selectPaF.Id;
+            projectSettings.TemplateTemplateFrl = elF.Id;
 
-            set.View3DTemplateFlr = select3DF.Name;
-            set.ViewPlanTEmplateFlr = selectPlanF.Name;
-            set.ViewJoistTemplateFlr = selectJSF.Name;
-            set.ViewTrackTemplateFlr = selectTSF.Name;
-            set.ViewPaTemplateFlr = selectPaF.Name;
-            set.TemplTemplateFlr = elF.Name;
+            projectSettings.HorizontalDimFlr = horDim.Id;
+            projectSettings.VerticalDimFlr = vertDim.Id;
+            projectSettings.HorizontalDimWa = horDim.Id;
+            projectSettings.HeightDimWa = vertDim.Id;
 
-            set.HorDim = horDim.Name;
-            set.VertDim = vertDim.Name;
+            pstore.WriteSettings(doc, projectSettings);
 
-            set.Save();
             Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Reload();
+
             Close();
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox v3dC, List<View3D> views, FilteredElementCollector ViewC3D, ElementId settings, Document doc)
+        private void popCombo(System.Windows.Forms.ComboBox v3dC, List<View3D> views, FilteredElementCollector ViewC3D, Document doc, ElementId settings = null)
         {
             if (views != null)
             {
                 v3dC.DataSource = views;
                 v3dC.DisplayMember = "Name";
 
-                if (doc.GetElement(settings) != null)
+                if (settings != null)
                 {
                     foreach (View3D item in ViewC3D)
                     {
@@ -178,14 +281,14 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox Combo, List<Autodesk.Revit.DB.View> viewt, FilteredElementCollector ViewCEl, ElementId settings, Document doc)
+        private void popCombo(System.Windows.Forms.ComboBox Combo, List<Autodesk.Revit.DB.View> viewt, FilteredElementCollector ViewCEl, Document doc, ElementId settings = null)
         {
             if (viewt != null)
             {
                 Combo.DataSource = viewt;
                 Combo.DisplayMember = "Name";
 
-                if (doc.GetElement(settings) != null)
+                if (settings != null)
                 {
                     foreach (Autodesk.Revit.DB.View item in ViewCEl)
                     {
@@ -200,14 +303,14 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<ViewSchedule> view, FilteredElementCollector ViewCollectSc, ElementId settings, Document doc)
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<ViewSchedule> view, FilteredElementCollector ViewCollectSc, Document doc, ElementId settings = null)
         {
             if (view != null)
             {
                 vCombo.DataSource = view;
                 vCombo.DisplayMember = "Name";
 
-                if (doc.GetElement(settings) != null)
+                if (settings != null)
                 {
                     foreach (ViewSchedule item in ViewCollectSc)
                     {
@@ -222,14 +325,14 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<DimensionType> view, FilteredElementCollector ViewCollectSc, ElementId settings, Document doc)
+        private void popCombo(System.Windows.Forms.ComboBox vCombo, List<DimensionType> view, FilteredElementCollector ViewCollectSc, Document doc, ElementId settings = null)
         {
             if (view != null)
             {
                 vCombo.DataSource = view;
                 vCombo.DisplayMember = "Name";
 
-                if (doc.GetElement(settings) != null)
+                if (settings != null)
                 {
                     foreach (DimensionType item in ViewCollectSc)
                     {
@@ -244,7 +347,7 @@ namespace BIMtrovert.BS_Customs
             }
         }
 
-        private void popCombo(System.Windows.Forms.ComboBox TCombo, List<string> listt, FilteredElementCollector tCollector, ElementId settings, Document doc)
+        private void popCombo(System.Windows.Forms.ComboBox TCombo, List<string> listt, FilteredElementCollector tCollector, Document doc, ElementId settings = null)
         {
             IList<Element> title = new List<Element>();
             title = tCollector.ToElements();
@@ -253,7 +356,7 @@ namespace BIMtrovert.BS_Customs
                 TCombo.DataSource = title;
                 TCombo.DisplayMember = "Name";
 
-                if (doc.GetElement(settings) != null)
+                if (settings != null)
                 {
                     foreach (Element i in title)
                     {

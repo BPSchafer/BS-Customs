@@ -35,6 +35,56 @@ namespace BIMtrovert.BS_Customs
 
     public sealed partial class PanelSelectionCommand
     {
+        private void AddViewToSheet(Document doc, ViewSheet sheet, ElementType notitle,XYZ pt, View view = null, View3D view3d = null)
+        {
+            if (view3d != null)
+            {
+                if (Viewport.CanAddViewToSheet(doc, sheet.Id, view3d.Id))
+                {
+                    Viewport p3d = Viewport.Create(doc, sheet.Id, view3d.Id, pt);
+
+                    foreach (ElementId eid in p3d.GetValidTypes())
+                    {
+                        ElementType typ = doc.GetElement(eid) as ElementType;
+                        if (typ.Name == "No Title")
+                        {
+                            notitle = typ;
+                            break;
+                        }
+
+                    }
+                    if (notitle != null)
+                    {
+                        p3d.ChangeTypeId(notitle.Id);
+                    }
+                }
+
+            }
+            else
+            {
+                if (Viewport.CanAddViewToSheet(doc, sheet.Id, view.Id))
+                {
+                    Viewport p3d = Viewport.Create(doc, sheet.Id, view.Id, pt);
+
+                    foreach (ElementId eid in p3d.GetValidTypes())
+                    {
+                        ElementType typ = doc.GetElement(eid) as ElementType;
+                        if (typ.Name == "No Title")
+                        {
+                            notitle = typ;
+                            break;
+                        }
+
+                    }
+                    if (notitle != null)
+                    {
+                        p3d.ChangeTypeId(notitle.Id);
+                    }
+                }
+
+            }
+            
+        }
 
         private bool DoWork(ExternalCommandData commandData,
             ref String message, ElementSet elements)
@@ -84,11 +134,13 @@ namespace BIMtrovert.BS_Customs
                     if (TransactionStatus.Started == tr.Start()
                         )
                     {
-
+                        ProjectSettingsStorage pstore = new ProjectSettingsStorage();
+                        ProjectSettings set = pstore.ReadSettings(doc);
+                        
                         ICollection<ElementId> selectedIds = selection.GetElementIds();
                         IList<ElementId> elems = new List<ElementId>();
                         IList<bool> check = new List<bool>();
-
+                        
 
                         if (0 == selectedIds.Count)
                         {
@@ -164,14 +216,14 @@ namespace BIMtrovert.BS_Customs
                                                     XYZ ptPl = new XYZ(0.5, 0.1, 0);
                                                     XYZ ptPa = new XYZ(0.03, 0.25, 0);
 
-                                                    if (Properties.Settings.Default.View3DTemplate != "")
+                                                    if (set != null)
                                                     {
                                                         try
                                                         {
                                                             FilteredElementCollector ViewCollector3D = new FilteredElementCollector(doc).OfClass(typeof(View3D));
                                                             foreach (View3D item in ViewCollector3D)
                                                             {
-                                                                if (item.Name == Properties.Settings.Default.View3DTemplate)
+                                                                if (item.Id == set.View3DTemplate)
                                                                 {
                                                                     view3d.ViewTemplateId = item.Id;
 
@@ -187,14 +239,14 @@ namespace BIMtrovert.BS_Customs
                                                     }
                                                     
                                                     
-                                                    if (Properties.Settings.Default.ViewElTemplate != "")
+                                                    if (set != null)
                                                     {
                                                         try
                                                         {
                                                             FilteredElementCollector ViewCollectorEl = new FilteredElementCollector(doc).OfClass(typeof(View));
                                                             foreach (View item in ViewCollectorEl)
                                                             {
-                                                                if (item.Name == Properties.Settings.Default.ViewElTemplate)
+                                                                if (item.Id == set.ViewElTemplate)
                                                                 {
                                                                     ElView.ViewTemplateId = item.Id;
                                                                 }
@@ -208,14 +260,14 @@ namespace BIMtrovert.BS_Customs
                                                         }
                                                     }
                                                     
-                                                    if (Properties.Settings.Default.ViewPlTemplate != "")
+                                                    if (set != null)
                                                     {
                                                         try
                                                         {
                                                             FilteredElementCollector ViewCollectorPl = new FilteredElementCollector(doc).OfClass(typeof(View));
                                                             foreach (View item in ViewCollectorPl)
                                                             {
-                                                                if (item.Name == Properties.Settings.Default.ViewPlTemplate)
+                                                                if (item.Id == set.ViewPlTemplate)
                                                                 {
                                                                     PlView.ViewTemplateId = item.Id;
                                                                 }
@@ -230,14 +282,14 @@ namespace BIMtrovert.BS_Customs
                                                     }
 
                                                     
-                                                    if (Properties.Settings.Default.ViewPaTemplate != "")
+                                                    if (set != null)
                                                     {
                                                         try
                                                         {
                                                             FilteredElementCollector ViewCollectorPa = new FilteredElementCollector(doc).OfClass(typeof(ViewSchedule));
                                                             foreach (ViewSchedule item in ViewCollectorPa)
                                                             {
-                                                                if (item.Name == Properties.Settings.Default.ViewPaTemplate)
+                                                                if (item.Id == set.ViewPaTemplate)
                                                                 {
                                                                     partList.ViewTemplateId = item.Id;
                                                                 }
@@ -250,7 +302,7 @@ namespace BIMtrovert.BS_Customs
                                                             break;
                                                         }
                                                     }
-                                                    if (Properties.Settings.Default.TemplTemplate != "")
+                                                    if (set != null)
                                                     {
                                                         try
                                                         {
@@ -258,10 +310,11 @@ namespace BIMtrovert.BS_Customs
                                                             FilteredElementCollector tempCollector = new FilteredElementCollector(doc).OfClass(typeof(FamilySymbol)).OfCategory(BuiltInCategory.OST_TitleBlocks);
                                                             foreach (Element item in tempCollector)
                                                             {
-                                                                if (item.Name == Properties.Settings.Default.TemplTemplate)
+                                                                if (item.Id == set.TemplateTemplate)
                                                                 {
                                                                     ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, item.Id);
-                                                                    if (Viewport.CanAddViewToSheet(doc, sheet.Id, view3d.Id))
+                                                                    AddViewToSheet(doc, sheet, notitle, pt3d, view3d: view3d);
+                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, view3d.Id))
                                                                     {
                                                                         Viewport p3d = Viewport.Create(doc, sheet.Id, view3d.Id, pt3d);
                                                                         
@@ -279,8 +332,10 @@ namespace BIMtrovert.BS_Customs
                                                                         {
                                                                             p3d.ChangeTypeId(notitle.Id);
                                                                         }
-                                                                    }
-                                                                    if (Viewport.CanAddViewToSheet(doc, sheet.Id, ElView.Id))
+                                                                    }*/
+
+                                                                    AddViewToSheet(doc, sheet, notitle, ptEl, ElView);
+                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, ElView.Id))
                                                                     {
                                                                         Viewport vEl = Viewport.Create(doc, sheet.Id, ElView.Id, ptEl);
                                                                         vEl.SetBoxCenter(ptEl);
@@ -288,8 +343,10 @@ namespace BIMtrovert.BS_Customs
                                                                         {
                                                                             vEl.ChangeTypeId(notitle.Id);
                                                                         }
-                                                                    }
-                                                                    if (Viewport.CanAddViewToSheet(doc, sheet.Id, PlView.Id))
+                                                                    }*/
+
+                                                                    AddViewToSheet(doc, sheet, notitle, ptPl, PlView);
+                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, PlView.Id))
                                                                     {
                                                                         Viewport vPl = Viewport.Create(doc, sheet.Id, PlView.Id, ptPl);
                                                                         vPl.SetBoxCenter(ptPl);
@@ -297,7 +354,7 @@ namespace BIMtrovert.BS_Customs
                                                                         {
                                                                             vPl.ChangeTypeId(notitle.Id);
                                                                         }
-                                                                    }
+                                                                    }*/
 
                                                                     ScheduleSheetInstance vPa =  ScheduleSheetInstance.Create(doc, sheet.Id, partList.Id, ptPa);
 

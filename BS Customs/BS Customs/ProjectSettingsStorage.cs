@@ -101,11 +101,11 @@ namespace BIMtrovert.BS_Customs
             settingsEntity.Set("HorizontalDimWa", settings.HorizontalDimWa);
             settingsEntity.Set("HeightDimWa", settings.HeightDimWa);
 
-            settingsEntity.Set("Check3DView", settings.Check3DView);
+            /*settingsEntity.Set("Check3DView", settings.Check3DView);
             settingsEntity.Set("CheckElev", settings.CheckElev);
             settingsEntity.Set("CheckPlan", settings.CheckPlan);
             settingsEntity.Set("CheckPart", settings.CheckPart);
-            settingsEntity.Set("CheckTemplate", settings.CheckTemplate);
+            settingsEntity.Set("CheckTemplate", settings.CheckTemplate);*/
 
 
             settingsEntity.Set("View3DTemplateFlr", settings.View3DTemplateFlr);
@@ -117,12 +117,12 @@ namespace BIMtrovert.BS_Customs
             settingsEntity.Set("HorizontalDimFlr", settings.HorizontalDimFlr);
             settingsEntity.Set("VerticalDimFlr", settings.VerticalDimFlr);
 
-            settingsEntity.Set("Check3DViewFlr", settings.Check3DViewFlr);
+            /*settingsEntity.Set("Check3DViewFlr", settings.Check3DViewFlr);
             settingsEntity.Set("CheckPlanFlr", settings.CheckPlanFlr);
             settingsEntity.Set("CheckJoistFlr", settings.CheckJoistFlr);
             settingsEntity.Set("CheckTrackFlr", settings.CheckTrackFlr);
             settingsEntity.Set("CheckPartFlr", settings.CheckPartFlr);
-            settingsEntity.Set("CheckTemplateFlr", settings.CheckTemplateFlr);
+            settingsEntity.Set("CheckTemplateFlr", settings.CheckTemplateFlr);*/
 
 
             Entity idEntity = new Entity(DataStorageUniqueIdSchema.GetSchema());
