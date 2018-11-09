@@ -189,6 +189,15 @@ namespace BIMtrovert.BS_Customs
                                                 tr.Start();
                                             }
                                             assemblyInstance = AssemblyInstance.Create(doc, elems, categoryId);
+                                            XYZ pt1 = assemblyInstance.GetTransform().BasisZ;
+                                            XYZ pt3 = assemblyInstance.GetTransform().Origin;
+                                            //XYZ pt2 = new XYZ(pt1.X, pt1.Y, pt1.Z+1);
+                                            
+                                            //LocationPoint ep = doc.GetElement(elems[0]).Location as LocationPoint;
+                                            //double angle = ep.Rotation*(180/Math.PI);
+                                            //Line line = Line.CreateBound(pt1, pt2);
+                                            Transform trf = Transform.CreateRotationAtPoint(pt1, 90, pt3);
+                                            assemblyInstance.SetTransform(trf);
                                             tr.Commit(); // commit the transaction that creates the assembly instance before modifying the instance's name
 
                                             if (tr.GetStatus() == TransactionStatus.Committed)
