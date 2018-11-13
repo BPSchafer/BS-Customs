@@ -132,6 +132,9 @@
     <Compile Include="SecondPanelCommand.cs" />
     <Compile Include="SecondPanelCommandAvailability.cs" />
     <Compile Include="SecondPanelCommand_Work.cs" />
+    <Compile Include="SelectAllElementsInLink.cs" />
+    <Compile Include="SelectAllElementsInLinkAvailability.cs" />
+    <Compile Include="SelectAllElementsInLink_Work.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AssemblyOptionsCommand.resx">
@@ -193,6 +196,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SecondPanelCommandAvailability.resx">
       <DependentUpon>SecondPanelCommandAvailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectAllElementsInLink.resx">
+      <DependentUpon>SelectAllElementsInLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectAllElementsInLinkAvailability.resx">
+      <DependentUpon>SelectAllElementsInLinkAvailability.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
