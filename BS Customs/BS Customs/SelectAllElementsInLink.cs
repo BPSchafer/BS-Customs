@@ -60,22 +60,18 @@ namespace BIMtrovert.BS_Customs
         /// does not succeed, Revit will undo any changes made 
         /// by the external command.</returns>    
         Result IExternalCommand.Execute(
-            ExternalCommandData commandData, ref string message
-            , ElementSet elements)
+            ExternalCommandData commandData, ref string message, ElementSet elements)
         {
 
-            ResourceManager res_mng = new ResourceManager(
-                  GetType());
-            ResourceManager def_res_mng = new ResourceManager(
-                typeof(Properties.Resources));
+            ResourceManager res_mng = new ResourceManager(GetType());
+            ResourceManager def_res_mng = new ResourceManager(typeof(Properties.Resources));
 
             Result result = Result.Failed;
 
             try
             {
 
-                UIApplication ui_app = commandData?.Application
-                    ;
+                UIApplication ui_app = commandData?.Application;
                 UIDocument ui_doc = ui_app?.ActiveUIDocument;
                 Application app = ui_app?.Application;
                 Document doc = ui_doc?.Document;
@@ -83,26 +79,20 @@ namespace BIMtrovert.BS_Customs
                 /* Wrap all transactions into the transaction 
                  * group. At first we get the transaction group
                  * localized name. */
-                var tr_gr_name = UIBuilder.GetResourceString(
-                    GetType(), typeof(Properties.Resources),
-                    "_transaction_group_name");
+                var tr_gr_name = UIBuilder.GetResourceString(GetType(), typeof(Properties.Resources),"_transaction_group_name");
 
-                using (var tr_gr = new TransactionGroup(doc,
-                    tr_gr_name))
+                using (var tr_gr = new TransactionGroup(doc,tr_gr_name))
                 {
 
-                    if (TransactionStatus.Started == tr_gr
-                        .Start())
+                    if (TransactionStatus.Started == tr_gr.Start())
                     {
-
                         /* Here do your work or the set of 
                          * works... */
                         if (DoWork(commandData, ref message,
                             elements))
                         {
 
-                            if (TransactionStatus.Committed ==
-                                tr_gr.Assimilate())
+                            if (TransactionStatus.Committed ==tr_gr.Assimilate())
                             {
 
                                 result = Result.Succeeded;
@@ -119,8 +109,7 @@ namespace BIMtrovert.BS_Customs
             catch (Exception ex)
             {
 
-                TaskDialog.Show(def_res_mng.GetString("_Error")
-                    , ex.Message);
+                TaskDialog.Show(def_res_mng.GetString("_Error"), ex.Message);
 
                 result = Result.Failed;
             }

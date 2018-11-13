@@ -84,8 +84,6 @@ namespace BIMtrovert.BS_Customs
             addList(dimCollector, dimL);
             addList(dimCollector, VertDimL);
 
-
-            //popCombo(v3dCombo, view3d, ViewCollector3D, doc);
             try
             {
                 popCombo(v3dCombo, view3d, ViewCollector3D, doc, pstore.ReadSettings(doc)?.View3DTemplate);
@@ -131,7 +129,6 @@ namespace BIMtrovert.BS_Customs
             {
                 popCombo(TemplCombo, tlist, tempCollector, doc);
             }
-
 
             try
             {
@@ -186,7 +183,6 @@ namespace BIMtrovert.BS_Customs
             {
                 popCombo(ShComboFlr, tlistF, tempCollector, doc);
             }
-
 
             try
             {
@@ -255,7 +251,6 @@ namespace BIMtrovert.BS_Customs
 
         private void button1_Click(object sender, EventArgs e)
         {
-
             Close();
         }
 

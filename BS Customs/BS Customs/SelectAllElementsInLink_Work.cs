@@ -41,7 +41,6 @@ namespace BIMtrovert.BS_Customs
             {
                 return true;
             }
-
             return false;
         }
 
@@ -54,35 +53,26 @@ namespace BIMtrovert.BS_Customs
     public sealed partial class SelectAllElementsInLink
     {
 
-        private bool DoWork(ExternalCommandData commandData,
-            ref String message, ElementSet elements)
+        private bool DoWork(ExternalCommandData commandData, ref String message, ElementSet elements)
         {
-
             if (null == commandData)
             {
-
-                throw new ArgumentNullException(nameof(
-                    commandData));
+                throw new ArgumentNullException(nameof(commandData));
             }
 
             if (null == message)
             {
 
-                throw new ArgumentNullException(nameof(message)
-                    );
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (null == elements)
             {
-
-                throw new ArgumentNullException(nameof(elements
-                    ));
+                throw new ArgumentNullException(nameof(elements));
             }
 
-            ResourceManager res_mng = new ResourceManager(
-                  GetType());
-            ResourceManager def_res_mng = new ResourceManager(
-                typeof(Properties.Resources));
+            ResourceManager res_mng = new ResourceManager(GetType());
+            ResourceManager def_res_mng = new ResourceManager(typeof(Properties.Resources));
 
             UIApplication ui_app = commandData.Application;
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
@@ -91,8 +81,7 @@ namespace BIMtrovert.BS_Customs
             Selection selection = ui_doc?.Selection;
             ICollection<ElementId> eid = new List<ElementId>();
 
-            var tr_name = res_mng.GetString("_transaction_name"
-                );
+            var tr_name = res_mng.GetString("_transaction_name");
 
             try
             {
@@ -119,25 +108,19 @@ namespace BIMtrovert.BS_Customs
                             View view = (View)doc.ActiveView;
                             ElementId viewId = view.Id;
 
-                            FilteredElementCollector fec = new FilteredElementCollector(d).OfCategory((BuiltInCategory)d.GetElement(hasPicked.LinkedElementId).Category.Id.IntegerValue);
+                            FilteredElementCollector fec = new FilteredElementCollector(d).OfClass(del.GetType());
                             Element e = fec.FirstElement();
                             foreach (Element ids in fec.ToElements())
                             {
                                 if (ids.Name == del.Name)
                                 {
-                                    
                                     eid.Add(ids.Id);
                                     list += "\n" + ids.Document.Title + " : " + ids.Name;
-                                }
-                                
+                                }    
                             }
 
                             ICollection<ElementId> es = ElementTransformUtils.CopyElements(d, eid, doc, tf1, null);
                             ui_doc.Selection.SetElementIds(es);
-                            //TaskDialog.Show("Revit", list);
-
-
-
                         }
 
                         return TransactionStatus.Committed ==
@@ -153,7 +136,6 @@ namespace BIMtrovert.BS_Customs
             }
             finally
             {
-
                 res_mng.ReleaseAllResources();
                 def_res_mng.ReleaseAllResources();
             }
