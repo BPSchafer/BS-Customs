@@ -149,7 +149,7 @@ namespace BIMtrovert.BS_Customs
                         }
                         else
                         {
-                            String info = "Ids of selected elements in the document are: ";
+                            String info = "The following assemblies have successfully been created: ";
                             foreach (ElementId id in selectedIds)
                             {
                                 AssemblyInstance assemblyInstance = null;
@@ -191,23 +191,29 @@ namespace BIMtrovert.BS_Customs
                                             assemblyInstance = AssemblyInstance.Create(doc, elems, categoryId);
                                             XYZ pt1 = assemblyInstance.GetTransform().BasisZ;
                                             XYZ pt3 = assemblyInstance.GetTransform().Origin;
+                                            XYZ pt4 = assemblyInstance.GetCenter();
+                                            Element pt5 = doc.GetElement(elems.First());
+                                            Options option = new Options();
+
+                                            XYZ pt6 = pt5.get_Geometry(option).GetBoundingBox().Transform.BasisZ;
                                             //XYZ pt2 = new XYZ(pt1.X, pt1.Y, pt1.Z+1);
                                             
                                             //LocationPoint ep = doc.GetElement(elems[0]).Location as LocationPoint;
                                             //double angle = ep.Rotation*(180/Math.PI);
                                             //Line line = Line.CreateBound(pt1, pt2);
-                                            Transform trf = Transform.CreateRotationAtPoint(pt1, 90, pt3);
-                                            assemblyInstance.SetTransform(trf);
+                                            //Transform trf = Transform.CreateRotationAtPoint(pt1, 90, pt4);
+                                            assemblyInstance.GetTransform().OfVector(pt6);
                                             tr.Commit(); // commit the transaction that creates the assembly instance before modifying the instance's name
 
                                             if (tr.GetStatus() == TransactionStatus.Committed)
                                             {
                                                 tr.Start("Set Assembly Name");
                                                 assemblyInstance.AssemblyTypeName = elem.get_Parameter(pa.Definition).AsString();
+                                                info += "\n" + assemblyInstance.AssemblyTypeName;
                                                 tr.Commit();
                                             }
 
-                                            if (assemblyInstance.AllowsAssemblyViewCreation()) // create assembly views for this assembly instance
+                                            /*if (assemblyInstance.AllowsAssemblyViewCreation()) // create assembly views for this assembly instance
                                             {
                                                 if (tr.GetStatus() == TransactionStatus.Committed)
                                                 {
@@ -323,47 +329,12 @@ namespace BIMtrovert.BS_Customs
                                                                 {
                                                                     ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, item.Id);
                                                                     AddViewToSheet(doc, sheet, notitle, pt3d, view3d: view3d);
-                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, view3d.Id))
-                                                                    {
-                                                                        Viewport p3d = Viewport.Create(doc, sheet.Id, view3d.Id, pt3d);
-                                                                        
-                                                                        foreach (ElementId eid in p3d.GetValidTypes())
-                                                                        {
-                                                                            ElementType typ = doc.GetElement(eid) as ElementType;
-                                                                            if(typ.Name == "No Title")
-                                                                            {
-                                                                                notitle = typ;
-                                                                                break;
-                                                                            }
-
-                                                                        }
-                                                                        if (notitle != null)
-                                                                        {
-                                                                            p3d.ChangeTypeId(notitle.Id);
-                                                                        }
-                                                                    }*/
-
+                                                                    
                                                                     AddViewToSheet(doc, sheet, notitle, ptEl, ElView);
-                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, ElView.Id))
-                                                                    {
-                                                                        Viewport vEl = Viewport.Create(doc, sheet.Id, ElView.Id, ptEl);
-                                                                        vEl.SetBoxCenter(ptEl);
-                                                                        if (notitle != null)
-                                                                        {
-                                                                            vEl.ChangeTypeId(notitle.Id);
-                                                                        }
-                                                                    }*/
+                                                                    
 
                                                                     AddViewToSheet(doc, sheet, notitle, ptPl, PlView);
-                                                                    /*if (Viewport.CanAddViewToSheet(doc, sheet.Id, PlView.Id))
-                                                                    {
-                                                                        Viewport vPl = Viewport.Create(doc, sheet.Id, PlView.Id, ptPl);
-                                                                        vPl.SetBoxCenter(ptPl);
-                                                                        if (notitle != null)
-                                                                        {
-                                                                            vPl.ChangeTypeId(notitle.Id);
-                                                                        }
-                                                                    }*/
+                                                                    
 
                                                                     ScheduleSheetInstance vPa =  ScheduleSheetInstance.Create(doc, sheet.Id, partList.Id, ptPa);
 
@@ -382,7 +353,7 @@ namespace BIMtrovert.BS_Customs
                                                     //ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc,assemblyInstance.Id)
                                                     tr.Commit();
                                                 }
-                                            }
+                                            }*/
                                         }
                                         //info += "\n\t" + pa.Definition.Name + ": " + pa.AsString();
                                     }                                   
