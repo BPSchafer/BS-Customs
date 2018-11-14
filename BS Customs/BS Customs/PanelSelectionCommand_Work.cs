@@ -35,7 +35,7 @@ namespace BIMtrovert.BS_Customs
 
     public sealed partial class PanelSelectionCommand
     {
-        private void AddViewToSheet(Document doc, ViewSheet sheet, ElementType notitle,XYZ pt, ElementId view )
+        private Viewport AddViewToSheet(Document doc, ViewSheet sheet, ElementType notitle,XYZ pt, ElementId view )
         {
 
             if (Viewport.CanAddViewToSheet(doc, sheet.Id, view))
@@ -54,20 +54,13 @@ namespace BIMtrovert.BS_Customs
                 }*/
                 if (notitle.Name == "No Title")
                 {
-                    try
-                    {
-                        p3d.ChangeTypeId(notitle.Id);
-                    }
-                    catch (Exception e)
-                    {
-
-                        //TaskDialog.Show("Revit", e.Message);
-                    }
-                    
+                    p3d.ChangeTypeId(notitle.Id);  
                 }
+                //BoundingBoxXYZ bbp = p3d.get_BoundingBox()
+                return p3d;
             }
 
-            
+            return null;
         }
 
         private bool DoWork(ExternalCommandData commandData,
@@ -214,15 +207,65 @@ namespace BIMtrovert.BS_Customs
                                                     tr.Start("View Creation");
 
                                                     View3D view3d = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
+
                                                     View ElView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
-                                                    
+                                                    TagMode tm = TagMode.TM_ADDBY_CATEGORY;
+                                                    bool addLead = false;
+                                                    foreach (ElementId eI in elems)
+                                                    {
+
+                                                        Element e = doc.GetElement(eI);
+                                                        XYZ center = null;
+                                                        if ((BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralColumns || (BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralFraming)
+                                                        {
+                                                            TagOrientation to = TagOrientation.Horizontal;
+                                                            if ((BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralColumns)
+                                                            {
+                                                                to = TagOrientation.Vertical;
+                                                                LocationPoint col = e.Location as LocationPoint;
+                                                                XYZ colpt = col.Point;
+                                                                double colX = colpt.X;
+                                                                double colY = colpt.Y;
+                                                                ElementId blId = e.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).AsElementId();
+                                                                Level bl = doc.GetElement(blId) as Level;
+                                                                double zb = bl.Elevation;
+                                                                double blo = e.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_OFFSET_PARAM).AsDouble();
+                                                                double bot = zb + blo;
+
+                                                                ElementId tlId = e.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_PARAM).AsElementId();
+                                                                Level tl = doc.GetElement(tlId) as Level;
+                                                                double zt = tl.Elevation;
+                                                                double tlo = e.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_OFFSET_PARAM).AsDouble();
+                                                                double top = zt + tlo;
+                                                                double zcent = (top + bot) / 2;
+
+                                                                center = new XYZ(colX,colY,zcent);
+                                                            }
+                                                            else
+                                                            {
+                                                                to = TagOrientation.Horizontal;
+                                                                LocationCurve loc = e.Location as LocationCurve;
+                                                                XYZ start2 = loc.Curve.GetEndPoint(0);
+                                                                XYZ end2 = loc.Curve.GetEndPoint(1);
+                                                                center = (start2 + end2) / 2;
+                                                            }
+
+                                                            
+                                                            Reference refer = new Reference(e);
+                                                            IndependentTag it = IndependentTag.Create(doc, ElView.Id, refer, addLead, tm, to, center);
+
+                                                        }
+                                                        
+                                                    }
+
                                                     View PlView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
+                                                    //ElementTransformUtils.MoveElement(doc, PlView.Id, new XYZ(0, 0, -10));
                                                     ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
 
-                                                    XYZ pt3d = new XYZ(0.05, 0.4, 0);
+                                                    XYZ pt3d = new XYZ(0.1, 0.45, 0);
                                                     XYZ ptEl = new XYZ(0.5, 0.5, 0);
-                                                    XYZ ptPl = new XYZ(0.5, 0.1, 0);
-                                                    XYZ ptPa = new XYZ(0.03, 0.25, 0);
+                                                    XYZ ptPl = new XYZ(0.5, 0.5, 0);
+                                                    XYZ ptPa = new XYZ(0.03, 0.1, 0);
 
                                                     if (set != null)
                                                     {
@@ -293,15 +336,37 @@ namespace BIMtrovert.BS_Customs
                                                             }
 
                                                             ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, set.TemplateTemplate);
-                                                            AddViewToSheet(doc, sheet, notitle, pt3d, view3d.Id);
+                                                            Viewport v3d = AddViewToSheet(doc, sheet, notitle, pt3d, view3d.Id);
+                                                            BoundingBoxXYZ bb3d = v3d.get_BoundingBox(sheet);
                                                                     
-                                                            AddViewToSheet(doc, sheet, notitle, ptEl, ElView.Id);
+                                                            Viewport vEl = AddViewToSheet(doc, sheet, notitle, ptEl, ElView.Id);
+                                                            BoundingBoxXYZ bbEl = vEl.get_BoundingBox(sheet);
                                                                     
 
-                                                            AddViewToSheet(doc, sheet, notitle, ptPl, PlView.Id);
+                                                            Viewport vPl = AddViewToSheet(doc, sheet, notitle, ptPl, PlView.Id);
+                                                            BoundingBoxXYZ bbPl = vPl.get_BoundingBox(sheet);
+                                                            
                                                                     
 
                                                             ScheduleSheetInstance vPa =  ScheduleSheetInstance.Create(doc, sheet.Id, partList.Id, ptPa);
+                                                            BoundingBoxXYZ bb = sheet.CropBox;
+                                                            BoundingBoxXYZ bbvPa = vPa.get_BoundingBox(sheet);
+                                                            double minX = bb.Min.X;
+                                                            double maxX = bb.Max.X;
+                                                            double xLen = maxX - minX;
+                                                            TaskDialog.Show("Revit",
+                                                                minX.ToString() + ", " + maxX.ToString() + "\n" +
+                                                                bbvPa.Min.Y + ", " + bbvPa.Max.Y +  "\n" + bbPl.Min.X + ", " + bbPl.Min.Y);
+                                                            vPa.Point = new XYZ(vPa.Point.X , vPa.Point.Y - bbvPa.Min.Y , vPa.Point.Z);
+                                                            double schedX = bbvPa.Max.X + 0.03;
+                                                            double centEl = (bbEl.Max.X- bbEl.Min.X)/2;
+                                                            double centElY = (bbEl.Max.Y - bbEl.Min.Y) / 2;
+                                                            double centPlY = (bbPl.Max.Y - bbPl.Min.Y) / 2;
+                                                            vEl.SetBoxCenter(new XYZ(schedX+centEl, (centPlY + 0.05)*2 + centElY, vEl.GetBoxCenter().Z));
+                                                            vPl.SetBoxCenter(new XYZ(schedX + centEl, centPlY + 0.05, vPl.GetBoxCenter().Z));
+                                                            //vPl.SetBoxCenter();
+                                                            //vEl.SetBoxCenter();
+                                                            //v3d.SetBoxCenter();
 
                                                             sheet.SheetNumber = elem.get_Parameter(pa.Definition).AsString();
                                                             sheet.Name = "Framing";
