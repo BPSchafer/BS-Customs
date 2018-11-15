@@ -27,6 +27,8 @@ using WPF = System.Windows;
 using System.Linq;
 using Bushman.RevitDevTools;
 using BIMtrovert.BS_Customs.Properties;
+using Point = Autodesk.Revit.DB.Point;
+
 #endregion
 
 
@@ -35,29 +37,17 @@ namespace BIMtrovert.BS_Customs
 
     public sealed partial class PanelSelectionCommand
     {
-        private Viewport AddViewToSheet(Document doc, ViewSheet sheet, ElementType notitle,XYZ pt, ElementId view )
+        private Viewport AddViewToSheet(Document doc, ViewSheet sheet, ElementType noTitle,XYZ pt, ElementId view )
         {
 
             if (Viewport.CanAddViewToSheet(doc, sheet.Id, view))
             {
-                Viewport p3d = Viewport.Create(doc, sheet.Id, view, pt);
-
-                /*foreach (ElementId eid in p3d.GetValidTypes())
+                Viewport p3D = Viewport.Create(doc, sheet.Id, view, pt);
+                if (noTitle.Name == "No Title")
                 {
-                    ElementType typ = doc.GetElement(eid) as ElementType;
-                    if (typ.Name == "No Title")
-                    {
-                        notitle = typ;
-                        break;
-                    }
-
-                }*/
-                if (notitle.Name == "No Title")
-                {
-                    p3d.ChangeTypeId(notitle.Id);  
+                    p3D.ChangeTypeId(noTitle.Id);  
                 }
-                //BoundingBoxXYZ bbp = p3d.get_BoundingBox()
-                return p3d;
+                return p3D;
             }
 
             return null;
@@ -70,28 +60,23 @@ namespace BIMtrovert.BS_Customs
             if (null == commandData)
             {
 
-                throw new ArgumentNullException(nameof(
-                    commandData));
+                throw new ArgumentNullException(nameof(commandData));
             }
 
             if (null == message)
             {
 
-                throw new ArgumentNullException(nameof(message)
-                    );
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (null == elements)
             {
 
-                throw new ArgumentNullException(nameof(elements
-                    ));
+                throw new ArgumentNullException(nameof(elements));
             }
 
-            ResourceManager res_mng = new ResourceManager(
-                  GetType());
-            ResourceManager def_res_mng = new ResourceManager(
-                typeof(Properties.Resources));
+            ResourceManager res_mng = new ResourceManager(GetType());
+            ResourceManager def_res_mng = new ResourceManager(typeof(Properties.Resources));
 
             UIApplication ui_app = commandData.Application;
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
@@ -99,20 +84,18 @@ namespace BIMtrovert.BS_Customs
             Document doc = ui_doc?.Document;
             Selection selection = ui_doc?.Selection;
 
-            var tr_name = res_mng.GetString("_transaction_name"
-                );
+            var tr_name = res_mng.GetString("_transaction_name");
 
             try
             {
-                using (var tr = new Transaction(doc, tr_name)
-                    )
+                using (var tr = new Transaction(doc, tr_name))
                 {
 
                     if (TransactionStatus.Started == tr.Start()
                         )
                     {
-                        ProjectSettingsStorage pstore = new ProjectSettingsStorage();
-                        ProjectSettings set = pstore.ReadSettings(doc);
+                        ProjectSettingsStorage pStore = new ProjectSettingsStorage();
+                        ProjectSettings set = pStore.ReadSettings(doc);
                         
                         ICollection<ElementId> selectedIds = selection.GetElementIds();
                         IList<ElementId> elems = new List<ElementId>();
@@ -129,18 +112,18 @@ namespace BIMtrovert.BS_Customs
                             String info = "The following assemblies have successfully been created: ";
                             foreach (ElementId id in selectedIds)
                             {
-                                AssemblyInstance assemblyInstance = null;
+                                
                                 Element elem = ui_doc.Document.GetElement(id);
                                 foreach (Parameter pa in elem.Parameters)
                                 {
                                     
                                     if (pa.Definition.Name == "BIMSF_Container" && pa.AsString() != null && elem.get_Parameter(BuiltInParameter.ASSEMBLY_NAME) == null)
                                     {
+
                                         ElementId ida = new ElementId(pa.Id.IntegerValue);
                                         elems.Clear();
 
-                                        ParameterValueProvider provider
-                                          = new ParameterValueProvider(ida);
+                                        ParameterValueProvider provider = new ParameterValueProvider(ida);
 
                                         FilterStringRuleEvaluator eval = new FilterStringEquals();
 
@@ -150,33 +133,59 @@ namespace BIMtrovert.BS_Customs
                                         foreach (Element e in fec)
                                         {
                                             elems.Add(e.Id);
-                                            //info += "\n\t" + e.Id.ToString();
                                         }
 
 
                                         ElementId categoryId = doc.GetElement(elems.First()).Category.Id; // use category of one of the assembly elements
                                         if (AssemblyInstance.IsValidNamingCategory(doc, categoryId, elems))
                                         {
-                                            if (tr.HasStarted())
-                                            {
+                                            TransactionStatus tStat = tr.HasStarted() ? tr.GetStatus() : tr.Start();
 
-                                            }
-                                            else
-                                            {
-                                                tr.Start();
-                                            }
-                                            ICollection<Element> el = new List<Element>();
-                                            assemblyInstance = AssemblyInstance.Create(doc, elems, categoryId);
+                                            IList<Element> el = new List<Element>();
+                                            IList<Element> col = new List<Element>();
+                                            ReferenceArray colArray = new ReferenceArray();
+                                            ReferenceArray framArray = new ReferenceArray();
+                                            colArray.Clear();
+                                            framArray.Clear();
+                                            AssemblyInstance assemblyInstance = AssemblyInstance.Create(doc, elems, categoryId);
                                             XYZ pt1 = assemblyInstance.GetTransform().BasisZ;
-                                            XYZ pt3 = assemblyInstance.GetTransform().Origin;
-                                            XYZ pt4 = assemblyInstance.GetCenter();
-                                            Element pt5 = doc.GetElement(elems.First());
+                                            XYZ pt2 = assemblyInstance.GetCenter();
                                             el.Clear();
+                                            col.Clear();
                                             foreach (ElementId item in elems)
                                             {
                                                 if (doc.GetElement(item).Category.Name == "Structural Framing")
                                                 {
                                                     el.Add(doc.GetElement(item));
+                                                    FamilyInstance fi = doc.GetElement(item) as FamilyInstance;
+                                                    framArray.Append(fi.GetReferenceByName("HardSide"));
+                                                    //TaskDialog.Show("Revit",fi.GetReferenceByName("HardSide").ToString());
+                                                }else if (doc.GetElement(item).Category.Name == "Structural Columns")
+                                                {
+
+
+                                                    col.Add(doc.GetElement(item));
+                                                    FamilyInstance fi = doc.GetElement(item) as FamilyInstance;
+                                                    TaskDialog.Show("Revit",
+                                                        fi.GetReferenceByName("HardSide").GlobalPoint
+                                                            .AngleTo(XYZ.BasisX).ToString());
+                                                    FamilyInstance fo = col[0] as FamilyInstance;
+                                                    Reference fuv = fo.GetReferenceByName("HardSide");
+
+                                                    if (fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX) == fuv.GlobalPoint.AngleTo(XYZ.BasisX))
+                                                    {
+                                                        colArray.Append(fi.GetReferenceByName("HardSide"));
+                                                        TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+                                                    }
+                                                    else
+                                                    {
+                                                        colArray.Append(fi.GetReferenceByName("LeftSide"));
+                                                        TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+                                                    }
+
+                                                    
+
+                                                    //TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").ToString());
                                                 }
                                             }
                                             Element il = el.First();
@@ -186,9 +195,8 @@ namespace BIMtrovert.BS_Customs
                                             XYZ end = line.GetEndPoint(1);
                                             XYZ v = (end - start);
                                             double angle = v.AngleTo(XYZ.BasisX);
-                                            //TaskDialog.Show("Revit", angle.ToString());
 
-                                            Transform trf = Transform.CreateRotationAtPoint(pt1, angle, pt4);
+                                            Transform trf = Transform.CreateRotationAtPoint(pt1, angle, pt2);
                                             assemblyInstance.SetTransform(trf);
                                             tr.Commit(); // commit the transaction that creates the assembly instance before modifying the instance's name
 
@@ -206,26 +214,26 @@ namespace BIMtrovert.BS_Customs
                                                 {
                                                     tr.Start("View Creation");
 
-                                                    View3D view3d = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
+                                                    View3D view3D = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
 
-                                                    View ElView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
+                                                    View elView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
                                                     TagMode tm = TagMode.TM_ADDBY_CATEGORY;
                                                     bool addLead = false;
                                                     foreach (ElementId eI in elems)
                                                     {
-
                                                         Element e = doc.GetElement(eI);
-                                                        XYZ center = null;
+                                                        
                                                         if ((BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralColumns || (BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralFraming)
                                                         {
-                                                            TagOrientation to = TagOrientation.Horizontal;
+                                                            XYZ center;
+                                                            TagOrientation to;
                                                             if ((BuiltInCategory)e.Category.Id.IntegerValue == BuiltInCategory.OST_StructuralColumns)
                                                             {
                                                                 to = TagOrientation.Vertical;
-                                                                LocationPoint col = e.Location as LocationPoint;
-                                                                XYZ colpt = col.Point;
-                                                                double colX = colpt.X;
-                                                                double colY = colpt.Y;
+                                                                LocationPoint cols = e.Location as LocationPoint;
+                                                                XYZ colPt = cols.Point;
+                                                                double colX = colPt.X;
+                                                                double colY = colPt.Y;
                                                                 ElementId blId = e.get_Parameter(BuiltInParameter.FAMILY_BASE_LEVEL_PARAM).AsElementId();
                                                                 Level bl = doc.GetElement(blId) as Level;
                                                                 double zb = bl.Elevation;
@@ -237,9 +245,9 @@ namespace BIMtrovert.BS_Customs
                                                                 double zt = tl.Elevation;
                                                                 double tlo = e.get_Parameter(BuiltInParameter.FAMILY_TOP_LEVEL_OFFSET_PARAM).AsDouble();
                                                                 double top = zt + tlo;
-                                                                double zcent = (top + bot) / 2;
+                                                                double zCent = (top + bot) / 2;
 
-                                                                center = new XYZ(colX,colY,zcent);
+                                                                center = new XYZ(colX,colY,zCent);
                                                             }
                                                             else
                                                             {
@@ -252,98 +260,93 @@ namespace BIMtrovert.BS_Customs
 
                                                             
                                                             Reference refer = new Reference(e);
-                                                            IndependentTag it = IndependentTag.Create(doc, ElView.Id, refer, addLead, tm, to, center);
+                                                            IndependentTag.Create(doc, elView.Id, refer, addLead, tm, to, center);
 
                                                         }
                                                         
                                                     }
 
-                                                    View PlView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
-                                                    //ElementTransformUtils.MoveElement(doc, PlView.Id, new XYZ(0, 0, -10));
+                                                    try
+                                                    {
+                                                        
+                                                        LocationCurve framC = el[0].Location as LocationCurve;
+
+                                                        Line framT = framC.Curve as Line;
+                                                        XYZ framP = framT.Origin;
+                                                        Line framL = Line.CreateBound(new XYZ(framP.X, framP.Y, framP.Z), new XYZ(framP.X, framP.Y, framP.Z-10));
+                                                        Dimension di = doc.Create.NewDimension(elView, framL, framArray);
+                                                        di.DimensionType = doc.GetElement(set.HorizontalDimFlr) as DimensionType;
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+                                                        TaskDialog.Show("Revit", e.Message + "\n" + e.Source);
+                                                    }
+
+                                                    try
+                                                    {
+                                                        LocationCurve framC = el[0].Location as LocationCurve;
+                                                       
+                                                        Line framT = framC.Curve as Line;
+                                                        XYZ framP = framT.Origin;
+                                                        Line framL = Line.CreateBound(framP, new XYZ(framP.X, framP.Y -10, framP.Z));
+                                                        Dimension di = doc.Create.NewDimension(elView, framL, colArray);
+                                                        di.DimensionType = doc.GetElement(set.HeightDimWa) as DimensionType;
+                                                    }
+                                                    catch (Exception e)
+                                                    {
+
+                                                    }
+
+                                                    View plView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
+
                                                     ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
 
-                                                    XYZ pt3d = new XYZ(0.1, 0.45, 0);
+                                                    XYZ pt3D = new XYZ(0.1, 0.45, 0);
                                                     XYZ ptEl = new XYZ(0.5, 0.5, 0);
                                                     XYZ ptPl = new XYZ(0.5, 0.5, 0);
                                                     XYZ ptPa = new XYZ(0.03, 0.1, 0);
 
                                                     if (set != null)
                                                     {
-                                                        try
-                                                        {
-                                                            view3d.ViewTemplateId = set.View3DTemplate;
-                                                        }
-                                                        catch(Exception ex)
-                                                        {
-                                                            TaskDialog.Show("Error",ex.Message);
-                                                            break;
-                                                        }
-                                                    }
-                                                    
-                                                    
-                                                    if (set != null)
-                                                    {
-                                                        try
-                                                        {
-                                                            ElView.ViewTemplateId = set.ViewElTemplate;
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                            TaskDialog.Show("Error", ex.Message);
-                                                            break;
-                                                        }
+                                                        view3D.ViewTemplateId = set.View3DTemplate;
                                                     }
                                                     
                                                     if (set != null)
                                                     {
-                                                        try
-                                                        {
-                                                            PlView.ViewTemplateId = set.ViewPlTemplate;
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                            TaskDialog.Show("Error", ex.Message);
-                                                            break;
-                                                        }
+                                                        elView.ViewTemplateId = set.ViewElTemplate;
                                                     }
-
                                                     
                                                     if (set != null)
                                                     {
-                                                        try
-                                                        {
-                                                            partList.ViewTemplateId = set.ViewPaTemplate;
-                                                        }
-                                                        catch (Exception ex)
-                                                        {
-                                                            TaskDialog.Show("Error", ex.Message);
-                                                            break;
-                                                        }
+                                                        plView.ViewTemplateId = set.ViewPlTemplate;
+                                                    }
+                                                    
+                                                    if (set != null)
+                                                    {
+                                                        partList.ViewTemplateId = set.ViewPaTemplate;
                                                     }
                                                     if (set != null)
                                                     {
                                                         try
                                                         {
-                                                            ElementType notitle = null;
+                                                            ElementType noTitle = null;
                                                             FilteredElementCollector fen = new FilteredElementCollector(doc).OfClass(typeof(ElementType));
                                                             foreach (Element item in fen)
                                                             {
                                                                 if (item.Name == "No Title")
                                                                 {
-                                                                    notitle = item as ElementType;
-                                                                    //TaskDialog.Show("Revit", notitle.Name);
+                                                                    noTitle = item as ElementType;
                                                                 }
                                                             }
 
                                                             ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, set.TemplateTemplate);
-                                                            Viewport v3d = AddViewToSheet(doc, sheet, notitle, pt3d, view3d.Id);
-                                                            BoundingBoxXYZ bb3d = v3d.get_BoundingBox(sheet);
+                                                            Viewport v3D = AddViewToSheet(doc, sheet, noTitle, pt3D, view3D.Id);
                                                                     
-                                                            Viewport vEl = AddViewToSheet(doc, sheet, notitle, ptEl, ElView.Id);
+                                                            Viewport vEl = AddViewToSheet(doc, sheet, noTitle, ptEl, elView.Id);
                                                             BoundingBoxXYZ bbEl = vEl.get_BoundingBox(sheet);
                                                                     
 
-                                                            Viewport vPl = AddViewToSheet(doc, sheet, notitle, ptPl, PlView.Id);
+                                                            Viewport vPl = AddViewToSheet(doc, sheet, noTitle, ptPl, plView.Id);
                                                             BoundingBoxXYZ bbPl = vPl.get_BoundingBox(sheet);
                                                             
                                                                     
@@ -354,9 +357,7 @@ namespace BIMtrovert.BS_Customs
                                                             double minX = bb.Min.X;
                                                             double maxX = bb.Max.X;
                                                             double xLen = maxX - minX;
-                                                            TaskDialog.Show("Revit",
-                                                                minX.ToString() + ", " + maxX.ToString() + "\n" +
-                                                                bbvPa.Min.Y + ", " + bbvPa.Max.Y +  "\n" + bbPl.Min.X + ", " + bbPl.Min.Y);
+                                                            //TaskDialog.Show("Revit",minX + ", " + maxX + "\n" +bbvPa.Min.Y + ", " + bbvPa.Max.Y +  "\n" + bbPl.Min.X + ", " + bbPl.Min.Y);
                                                             vPa.Point = new XYZ(vPa.Point.X , vPa.Point.Y - bbvPa.Min.Y , vPa.Point.Z);
                                                             double schedX = bbvPa.Max.X + 0.03;
                                                             double centEl = (bbEl.Max.X- bbEl.Min.X)/2;
@@ -364,9 +365,7 @@ namespace BIMtrovert.BS_Customs
                                                             double centPlY = (bbPl.Max.Y - bbPl.Min.Y) / 2;
                                                             vEl.SetBoxCenter(new XYZ(schedX+centEl, (centPlY + 0.05)*2 + centElY, vEl.GetBoxCenter().Z));
                                                             vPl.SetBoxCenter(new XYZ(schedX + centEl, centPlY + 0.05, vPl.GetBoxCenter().Z));
-                                                            //vPl.SetBoxCenter();
-                                                            //vEl.SetBoxCenter();
-                                                            //v3d.SetBoxCenter();
+
 
                                                             sheet.SheetNumber = elem.get_Parameter(pa.Definition).AsString();
                                                             sheet.Name = "Framing";
@@ -378,7 +377,7 @@ namespace BIMtrovert.BS_Customs
                                                         }
                                                     }
                                                     doc.Regenerate();
-                                                    //ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc,assemblyInstance.Id)
+
                                                     tr.Commit();
                                                 }
                                             }
@@ -402,11 +401,9 @@ namespace BIMtrovert.BS_Customs
             }
             finally
             {
-
                 res_mng.ReleaseAllResources();
                 def_res_mng.ReleaseAllResources();
             }
-
             return false;
         }
     }
