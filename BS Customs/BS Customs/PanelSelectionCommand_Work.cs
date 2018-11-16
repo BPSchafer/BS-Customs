@@ -12,6 +12,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Windows.Threading;
+//using System.Windows.Forms;
 using System.Diagnostics;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
@@ -28,6 +30,7 @@ using System.Linq;
 using Bushman.RevitDevTools;
 using BIMtrovert.BS_Customs.Properties;
 using Point = Autodesk.Revit.DB.Point;
+
 
 #endregion
 
@@ -52,6 +55,8 @@ namespace BIMtrovert.BS_Customs
 
             return null;
         }
+
+
 
         private bool DoWork(ExternalCommandData commandData,
             ref String message, ElementSet elements)
@@ -109,7 +114,31 @@ namespace BIMtrovert.BS_Customs
                         }
                         else
                         {
+                            int totalCount = 0;
+                            int currentCount = 0;
+                            int localTotal = 10;
+                            int localCurrent = 0;
                             String info = "The following assemblies have successfully been created: ";
+                            foreach (ElementId id in selectedIds)
+                            {
+                                Element elem = ui_doc.Document.GetElement(id);
+                                foreach (Parameter pa in elem.Parameters)
+                                {
+                                    if (pa.Definition.Name == "BIMSF_Container" && pa.AsString() != null &&
+                                        elem.get_Parameter(BuiltInParameter.ASSEMBLY_NAME) == null)
+                                    {
+                                        totalCount += 1;
+                                    }
+                                }
+                            }
+                            ProgressForm pf = new ProgressForm(String.Format("{0} of {1} panels processed", currentCount, totalCount), "Creating wall assembly...", (int)100/totalCount, (int)100/localTotal);
+                            string localString = "Creating wall assembly...";
+                            string globalString =
+                                String.Format("{0} of {1} panels processed", currentCount, totalCount);
+                            pf.LabelSet(localString, false, false, globalString, false);
+                        
+                            pf.Show();
+                            
                             foreach (ElementId id in selectedIds)
                             {
                                 
@@ -141,6 +170,8 @@ namespace BIMtrovert.BS_Customs
                                         {
                                             TransactionStatus tStat = tr.HasStarted() ? tr.GetStatus() : tr.Start();
 
+                                            pf.LabelSet(localString, true, false, globalString, false);
+
                                             IList<Element> el = new List<Element>();
                                             IList<Element> col = new List<Element>();
                                             ReferenceArray colArray = new ReferenceArray();
@@ -165,26 +196,37 @@ namespace BIMtrovert.BS_Customs
 
 
                                                     col.Add(doc.GetElement(item));
+                                                    Element colEl = doc.GetElement(item);
+                                                    LocationPoint colLc = colEl.Location as LocationPoint;
+                                                    XYZ colV = colLc.Point;
+                                                    double colAngle = colV.AngleTo(XYZ.BasisX);
+
                                                     FamilyInstance fi = doc.GetElement(item) as FamilyInstance;
-                                                    TaskDialog.Show("Revit",
-                                                        fi.GetReferenceByName("HardSide").GlobalPoint
-                                                            .AngleTo(XYZ.BasisX).ToString());
-                                                    FamilyInstance fo = col[0] as FamilyInstance;
-                                                    Reference fuv = fo.GetReferenceByName("HardSide");
 
-                                                    if (fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX) == fuv.GlobalPoint.AngleTo(XYZ.BasisX))
+                                                    try
                                                     {
-                                                        colArray.Append(fi.GetReferenceByName("HardSide"));
-                                                        TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+                                                        //FamilyInstance fi = doc.GetElement(item) as FamilyInstance;
+
+                                                        Element fo = col[0];
+                                                        LocationPoint foLc = fo.Location as LocationPoint;
+                                                        XYZ foV = foLc.Point;
+                                                        double foAngle = foV.AngleTo(XYZ.BasisX);
+
+                                                        if (colAngle == foAngle)
+                                                        {
+                                                            colArray.Append(fi.GetReferenceByName("HardSide"));
+                                                            //TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+                                                        }
+                                                        else
+                                                        {
+                                                            colArray.Append(fi.GetReferenceByName("LeftSide"));
+                                                            //TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+                                                        }
                                                     }
-                                                    else
+                                                    catch
                                                     {
-                                                        colArray.Append(fi.GetReferenceByName("LeftSide"));
-                                                        TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").GlobalPoint.AngleTo(XYZ.BasisX).ToString() + "\n" + fuv.GlobalPoint.AngleTo(XYZ.BasisX));
+
                                                     }
-
-                                                    
-
                                                     //TaskDialog.Show("Revit", fi.GetReferenceByName("HardSide").ToString());
                                                 }
                                             }
@@ -199,7 +241,9 @@ namespace BIMtrovert.BS_Customs
                                             Transform trf = Transform.CreateRotationAtPoint(pt1, angle, pt2);
                                             assemblyInstance.SetTransform(trf);
                                             tr.Commit(); // commit the transaction that creates the assembly instance before modifying the instance's name
-
+                                            localCurrent += 1;
+                                            localString = "Creating 3D view...";
+                                            pf.LabelSet(localString, true, false, globalString, false);
                                             if (tr.GetStatus() == TransactionStatus.Committed)
                                             {
                                                 tr.Start("Set Assembly Name");
@@ -216,7 +260,16 @@ namespace BIMtrovert.BS_Customs
 
                                                     View3D view3D = AssemblyViewUtils.Create3DOrthographic(doc, assemblyInstance.Id);
 
-                                                    View elView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
+                                                    localCurrent += 1;
+                                                    localString = "Creating elevation view...";
+                                                    pf.LabelSet(localString, true, false, globalString, false);
+
+                                                    Autodesk.Revit.DB.View elView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
+
+                                                    localCurrent += 1;
+                                                    localString = "Populating elevation view...";
+                                                    pf.LabelSet(localString, true, false, globalString, false);
+
                                                     TagMode tm = TagMode.TM_ADDBY_CATEGORY;
                                                     bool addLead = false;
                                                     foreach (ElementId eI in elems)
@@ -296,9 +349,14 @@ namespace BIMtrovert.BS_Customs
                                                     {
 
                                                     }
+                                                    localCurrent += 1;
+                                                    localString = "Creating plan view...";
+                                                    pf.LabelSet(localString, true, false, globalString, false);
+                                                    Autodesk.Revit.DB.View plView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
 
-                                                    View plView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationTop);
-
+                                                    localCurrent += 1;
+                                                    localString = "Creating material takeoff schedule...";
+                                                    pf.LabelSet(localString, true, false, globalString, false);
                                                     ViewSchedule partList = AssemblyViewUtils.CreatePartList(doc, assemblyInstance.Id);
 
                                                     XYZ pt3D = new XYZ(0.1, 0.45, 0);
@@ -329,6 +387,9 @@ namespace BIMtrovert.BS_Customs
                                                     {
                                                         try
                                                         {
+                                                            localCurrent += 1;
+                                                            localString = "Creating spool sheet...";
+                                                            pf.LabelSet(localString, true, false, globalString, false);
                                                             ElementType noTitle = null;
                                                             FilteredElementCollector fen = new FilteredElementCollector(doc).OfClass(typeof(ElementType));
                                                             foreach (Element item in fen)
@@ -340,6 +401,9 @@ namespace BIMtrovert.BS_Customs
                                                             }
 
                                                             ViewSheet sheet = AssemblyViewUtils.CreateSheet(doc, assemblyInstance.Id, set.TemplateTemplate);
+                                                            localCurrent += 1;
+                                                            localString = "Adding views to sheet...";
+                                                            pf.LabelSet(localString, true, false, globalString, false);
                                                             Viewport v3D = AddViewToSheet(doc, sheet, noTitle, pt3D, view3D.Id);
                                                                     
                                                             Viewport vEl = AddViewToSheet(doc, sheet, noTitle, ptEl, elView.Id);
@@ -352,6 +416,9 @@ namespace BIMtrovert.BS_Customs
                                                                     
 
                                                             ScheduleSheetInstance vPa =  ScheduleSheetInstance.Create(doc, sheet.Id, partList.Id, ptPa);
+                                                            localCurrent += 1;
+                                                            localString = "Cleaning up spool sheet...";
+                                                            pf.LabelSet(localString, true, false, globalString, false);
                                                             BoundingBoxXYZ bb = sheet.CropBox;
                                                             BoundingBoxXYZ bbvPa = vPa.get_BoundingBox(sheet);
                                                             double minX = bb.Min.X;
@@ -377,16 +444,24 @@ namespace BIMtrovert.BS_Customs
                                                         }
                                                     }
                                                     doc.Regenerate();
-
+                                                    localCurrent += 1;
+                                                    localString = String.Format("Wall assembly {0} completed...",
+                                                        elem.get_Parameter(pa.Definition).AsString());
+                                                    pf.LabelSet(localString, true, false, globalString, false);
                                                     tr.Commit();
+                                                    localCurrent = 0;
                                                 }
                                             }
+                                            currentCount += 1;
+                                            globalString = String.Format("{0} of {1} panels processed", currentCount, totalCount);
+                                            pf.LabelSet(localString, false, true, globalString, true);
+
                                         }
                                         //info += "\n\t" + pa.Definition.Name + ": " + pa.AsString();
                                     }                                   
                                 }
                             }
-
+                            pf.Close();
                             TaskDialog.Show("Revit", info);
                         }
 

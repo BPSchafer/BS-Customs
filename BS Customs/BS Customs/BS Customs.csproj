@@ -114,6 +114,12 @@
     <Compile Include="ParameterSelector.Designer.cs">
       <DependentUpon>ParameterSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressForm.Designer.cs">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectSettings.cs" />
     <Compile Include="ProjectSettingsSchema.cs" />
     <Compile Include="ProjectSettingsStorage.cs" />
@@ -166,6 +172,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterSelector.resx">
       <DependentUpon>ParameterSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressForm.resx">
+      <DependentUpon>ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProjectSettings.resx">
       <DependentUpon>ProjectSettings.cs</DependentUpon>
