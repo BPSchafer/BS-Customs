@@ -13,9 +13,6 @@ namespace BIMtrovert.BS_Customs
 {
     public partial class ProgressForm : Form
     {
-        //public delegate void ProgressFormDelegate();
-        private int percent = 0;
-        private int per = 0;
         public ProgressForm(string globalLabel1, string localLabel1, int globalStep, int localStep)
         {
             InitializeComponent();
