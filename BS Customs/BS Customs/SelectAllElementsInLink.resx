@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="_Button_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="_Button_image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Button_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_Button_long_description" xml:space="preserve">
-    <value>The command long description.</value>
+    <value>Select an element from a linked project to copy it into this project in the same location.</value>
     <comment>The command long description.</comment>
   </data>
   <data name="_command_message" xml:space="preserve">
@@ -139,10 +139,10 @@ Elements of Type</value>
     <comment>Button caption.</comment>
   </data>
   <data name="_Button_tooltip_text" xml:space="preserve">
-    <value>The command default tooltip text.</value>
+    <value>Copies linked elements into the current project.</value>
     <comment>Button tooltip text.</comment>
   </data>
-  <data name="_Button_tooltip_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="_Button_tooltip_image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Button_tooltip_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_Help_file_name" xml:space="preserve">
@@ -175,5 +175,8 @@ Elements of Type</value>
   </data>
   <data name="_transaction_name" xml:space="preserve">
     <value>TODO: rename this transaction.</value>
+  </data>
+  <data name="_Button_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Copy-04-WF.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

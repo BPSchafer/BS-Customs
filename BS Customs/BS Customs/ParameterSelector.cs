@@ -94,6 +94,11 @@ namespace BIMtrovert.BS_Customs
                 throw;
             }
         }
+
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 
     public class Par

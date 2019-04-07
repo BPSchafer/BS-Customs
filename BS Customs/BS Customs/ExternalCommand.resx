@@ -122,7 +122,7 @@
     <value>Resources\Button_image.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_Button_long_description" xml:space="preserve">
-    <value>Filter elements by parameters in current view</value>
+    <value>Select an element to get a dialog of all available parameters in that element. Toggle 'and' and 'or' to refine the search to elements that match all of the parameters (and) or match any of the parameters (or), then select all of the parameters you want to search by and click filter.</value>
     <comment>The command long description.</comment>
   </data>
   <data name="_command_message" xml:space="preserve">
@@ -138,7 +138,7 @@
     <comment>Button caption.</comment>
   </data>
   <data name="_Button_tooltip_text" xml:space="preserve">
-    <value>Filter elements by parameters in current view</value>
+    <value>Filter elements by parameters in the current view</value>
     <comment>Button tooltip text.</comment>
   </data>
   <data name="_Button_tooltip_image1" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -175,7 +175,10 @@
   <data name="_transaction_name" xml:space="preserve">
     <value>filterParameter</value>
   </data>
-  <data name="_Button_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="_Button_image2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\magnifyingglass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_Button_image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Magnifying-Glass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

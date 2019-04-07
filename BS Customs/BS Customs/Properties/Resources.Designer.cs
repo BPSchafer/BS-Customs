@@ -180,15 +180,6 @@ namespace BIMtrovert.BS_Customs.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Panel Assembly.
-        /// </summary>
-        internal static string _Ribbon_panel_name_2 {
-            get {
-                return ResourceManager.GetString("_Ribbon_panel_name_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to BS Customs.
         /// </summary>
         internal static string _Ribbon_tab_name {

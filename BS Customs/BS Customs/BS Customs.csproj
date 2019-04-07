@@ -91,38 +91,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyOptionsCommand.cs" />
-    <Compile Include="AssemblyOptionsCommandAvailability.cs" />
-    <Compile Include="AssemblyOptionsCommand_Work.cs" />
-    <Compile Include="AssemblyOptionsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AssemblyOptionsForm.Designer.cs">
-      <DependentUpon>AssemblyOptionsForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataStorageUniqueIdSchema.cs" />
     <Compile Include="ExternalApplication.cs" />
     <Compile Include="ExternalCommandAvailability.cs" />
     <Compile Include="ExternalCommand.cs" />
     <Compile Include="ExternalCommand_Work.cs" />
-    <Compile Include="PanelSelectionCommand.cs" />
-    <Compile Include="PanelSelectionCommandAvailability.cs" />
-    <Compile Include="PanelSelectionCommand_Work.cs" />
     <Compile Include="ParameterSelector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ParameterSelector.Designer.cs">
       <DependentUpon>ParameterSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProgressForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProgressForm.Designer.cs">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectSettings.cs" />
-    <Compile Include="ProjectSettingsSchema.cs" />
-    <Compile Include="ProjectSettingsStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -143,56 +121,14 @@
     <Compile Include="SelectAllElementsInLink_Work.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AssemblyOptionsCommand.resx">
-      <DependentUpon>AssemblyOptionsCommand.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AssemblyOptionsCommandAvailability.resx">
-      <DependentUpon>AssemblyOptionsCommandAvailability.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AssemblyOptionsForm.resx">
-      <DependentUpon>AssemblyOptionsForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataStorageUniqueIdSchema.resx">
-      <DependentUpon>DataStorageUniqueIdSchema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataStorageUniqueIdSchema.ru.resx">
-      <DependentUpon>DataStorageUniqueIdSchema.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ExternalApplication.resx">
       <DependentUpon>ExternalApplication.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ExternalCommand.resx">
       <DependentUpon>ExternalCommand.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PanelSelectionCommand.resx">
-      <DependentUpon>PanelSelectionCommand.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PanelSelectionCommandAvailability.resx">
-      <DependentUpon>PanelSelectionCommandAvailability.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ParameterSelector.resx">
       <DependentUpon>ParameterSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProgressForm.resx">
-      <DependentUpon>ProgressForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettings.resx">
-      <DependentUpon>ProjectSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettings.ru.resx">
-      <DependentUpon>ProjectSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettingsSchema.resx">
-      <DependentUpon>ProjectSettingsSchema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettingsSchema.ru.resx">
-      <DependentUpon>ProjectSettingsSchema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettingsStorage.resx">
-      <DependentUpon>ProjectSettingsStorage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProjectSettingsStorage.ru.resx">
-      <DependentUpon>ProjectSettingsStorage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RunFilter.resx">
       <DependentUpon>RunFilter.cs</DependentUpon>
@@ -224,6 +160,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BS Customs.addin" />
+    <None Include="Resources\Copy-04-WF.png" />
+    <None Include="Resources\Magnifying-Glass.png" />
+    <None Include="Resources\Magnifying-Glass-Globe.png" />
+    <None Include="Resources\_Button_image_2.png" />
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

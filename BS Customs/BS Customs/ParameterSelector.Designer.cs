@@ -34,6 +34,7 @@
             this.orRadio = new System.Windows.Forms.RadioButton();
             this.andRadio = new System.Windows.Forms.RadioButton();
             this.checksParam = new System.Windows.Forms.CheckedListBox();
+            this.CancelBtn = new System.Windows.Forms.Button();
             this.filterBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +42,7 @@
             // 
             this.filterButton.Location = new System.Drawing.Point(12, 19);
             this.filterButton.Name = "filterButton";
-            this.filterButton.Size = new System.Drawing.Size(153, 62);
+            this.filterButton.Size = new System.Drawing.Size(100, 60);
             this.filterButton.TabIndex = 3;
             this.filterButton.Text = "Filter";
             this.filterButton.UseVisualStyleBackColor = true;
@@ -95,11 +96,22 @@
             this.checksParam.Size = new System.Drawing.Size(428, 554);
             this.checksParam.TabIndex = 1;
             // 
+            // CancelBtn
+            // 
+            this.CancelBtn.Location = new System.Drawing.Point(123, 19);
+            this.CancelBtn.Name = "CancelBtn";
+            this.CancelBtn.Size = new System.Drawing.Size(100, 60);
+            this.CancelBtn.TabIndex = 4;
+            this.CancelBtn.Text = "Cancel";
+            this.CancelBtn.UseVisualStyleBackColor = true;
+            this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
+            // 
             // ParameterSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(428, 694);
+            this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.checksParam);
             this.Controls.Add(this.filterBox);
             this.Controls.Add(this.filterButton);
@@ -123,5 +135,6 @@
         private System.Windows.Forms.RadioButton orRadio;
         private System.Windows.Forms.RadioButton andRadio;
         private System.Windows.Forms.CheckedListBox checksParam;
+        private System.Windows.Forms.Button CancelBtn;
     }
 }
