@@ -1,9 +1,9 @@
 ﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-/* SecondPanelCommand_Work.cs
+/* ParameterSearcherCommand_Work.cs
  * https://www.bimtrovert.com
- * © BIMtrovert, 2018
+ * © BIMtrovert, 2019
  *
  * This file contains the methods which are used by the 
  * command.
@@ -33,7 +33,7 @@ using BIMtrovert.BS_Customs.Properties;
 namespace BIMtrovert.BS_Customs
 {
 
-    public sealed partial class SecondPanelCommand
+    public sealed partial class ParameterSearcherCommand
     {
 
         private bool DoWork(ExternalCommandData commandData,
@@ -70,7 +70,7 @@ namespace BIMtrovert.BS_Customs
             UIDocument ui_doc = ui_app?.ActiveUIDocument;
             Application app = ui_app?.Application;
             Document doc = ui_doc?.Document;
-            Selection selection = ui_doc?.Selection;
+            Categories catSet = doc.Settings.Categories;
 
             var tr_name = res_mng.GetString("_transaction_name"
                 );
@@ -85,18 +85,10 @@ namespace BIMtrovert.BS_Customs
                         )
                     {
 
-                        Reference hasPicked = selection.PickObject(ObjectType.Element);
-                        //ElementId hasPicked = selection.GetElementId();
-                        if (hasPicked != null)
-                        {
-                            ElementId id = hasPicked.ElementId;
-                            Element el = ui_doc.Document.GetElement(id);
-                            ParameterSet parameterSet = el.Parameters;
 
-                            ParameterSelector ps = new ParameterSelector(parameterSet, commandData, id, true);
-                            ps.Show();
-                        }
 
+                        ParameterSearcher ps = new ParameterSearcher(catSet, commandData);
+                        ps.Show();
                         return TransactionStatus.Committed ==
                             tr.Commit();
                     }

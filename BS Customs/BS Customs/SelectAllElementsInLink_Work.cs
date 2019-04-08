@@ -93,7 +93,7 @@ namespace BIMtrovert.BS_Customs
                         )
                     {
 
-                        Reference hasPicked = selection.PickObject(ObjectType.LinkedElement, "Select a linked model");
+                        Reference hasPicked = selection.PickObject(ObjectType.LinkedElement, "Select an element from a linked model");
                         if (hasPicked != null)
                         {
                             String list = null;

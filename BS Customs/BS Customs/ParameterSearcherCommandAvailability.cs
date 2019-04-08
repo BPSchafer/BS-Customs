@@ -1,9 +1,9 @@
 // This is an independent project of an individual developer. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
-/* SecondPanelCommandAvailability.cs
+/* ParameterSearcherCommandAvailability.cs
  * https://www.bimtrovert.com
- * © BIMtrovert, 2018
+ * © BIMtrovert, 2019
  *
  * The external command.
  */
@@ -35,7 +35,7 @@ namespace BIMtrovert.BS_Customs
     /// external command of Revit.
     /// </summary>	
 	[Transaction(TransactionMode.Manual)]
-    public sealed partial class SecondPanelCommandAvailability
+    public sealed partial class ParameterSearcherCommandAvailability
         : IExternalCommandAvailability
     {
 

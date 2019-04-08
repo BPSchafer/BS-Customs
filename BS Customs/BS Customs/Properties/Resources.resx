@@ -176,4 +176,8 @@
     <value>TODO: Change this transaction group name.</value>
     <comment>Transaction group name.</comment>
   </data>
+  <data name="_Ribbon_panel_name_1" xml:space="preserve">
+    <value>Linked Projects</value>
+    <comment>Ribbon panel name.</comment>
+  </data>
 </root>

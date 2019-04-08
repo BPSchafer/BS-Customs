@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define BS Customs_TargetDir=$(var.BS Customs.TargetDir)?>
+	<Product Id="*" Name="BS Customs" Language="1033" Version="1.0.3.0" Manufacturer="BIMtrovert" UpgradeCode="e28ab803-6afb-4392-85b4-a11dfb2ec3b6">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"/>
+    <UIRef Id="WixUI_InstallDir"/>
+
+    <UIRef Id="WixUI_ErrorProgressText"/>
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thanks for installing BS Customs Revit Addin"/>
+
+		<Feature Id="ProductFeature" Title="BS Customs" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentGroupRef Id="ProgramFilesFolder_files" />
+      <ComponentGroupRef Id="ProductAddin" />
+		</Feature>
+
+	</Product>
+
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="D" Name="ProgramData">
+        <Directory Id="DI" Name="Autodesk">
+          <Directory Id="DIR" Name="Revit">
+            <Directory Id="DIRN" Name="Addins">
+              <Directory Id="DIRT" Name="2018">
+                <Directory Id="INSTALLFOLDER" Name="!(bind.property.ProductName)">
+                  <Directory Id="RESOURCES" Name="ru"/>
+                </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+			<!-- <Component Id="ProductComponent"> -->
+				<!-- TODO: Insert files, registry keys, and other resources here. -->
+			<!-- </Component> -->
+
+			<Component Id="readme.txt" Guid="0dcaa48f-5f2d-4b7d-917f-709f4765d0ee">
+			  <File Id="readme.txt" Name="readme.txt" Source="$(var.BS Customs_TargetDir)readme.txt" />
+			</Component>
+			<Component Id="License.txt" Guid="aca4c17c-1285-4995-9a3d-dca69a82c37b">
+			  <File Id="License.txt" Name="License.txt" Source="$(var.BS Customs_TargetDir)License.txt" />
+			</Component>
+			<Component Id="AssemblyResolves.xml" Guid="eda0699d-7a70-4914-8d4c-d8a273389d51">
+			  <File Id="AssemblyResolves.xml" Name="AssemblyResolves.xml" Source="$(var.BS Customs_TargetDir)AssemblyResolves.xml" />
+			</Component>
+			<Component Id="BS_Customs.dll" Guid="5eb17eb5-e2a7-41c4-9939-d89eb0975749">
+			  <File Id="BS_Customs.dll" Name="BS Customs.dll" Source="$(var.BS Customs_TargetDir)BS Customs.dll" />
+			</Component>
+			<Component Id="RevitDevTools.dll" Guid="fbfd1633-422e-42cb-be02-72e00d0c0140">
+			  <File Id="RevitDevTools.dll" Name="RevitDevTools.dll" Source="$(var.BS Customs_TargetDir)RevitDevTools.dll" />
+			</Component>
+		</ComponentGroup>
+    <ComponentGroup Id="ProductAddin" Directory="DIRT">
+      <Component Id="BS_Customs.addin" Guid="58a65313-7339-4e72-98d1-0081be03d156">
+        <File Id="BS_Customs.addin" Name="BS Customs.addin" Source="$(var.BS Customs_TargetDir)BS Customs.addin" />
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ProgramFilesFolder_files" Directory="RESOURCES">
+      <Component Id="ru_BS_Customs.resources.dll" Guid="28c7f2f2-a8b8-4fd7-882a-f307d3761558">
+        <File Id="ru_BS_Customs.resources.dll" Name="BS Customs.resources.dll" Source="$(var.BS Customs_TargetDir)ru\BS Customs.resources.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>
+

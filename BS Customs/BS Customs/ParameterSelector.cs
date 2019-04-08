@@ -83,7 +83,14 @@ namespace BIMtrovert.BS_Customs
                     pas.Add(par.ID);
 
                 }
-
+                if (projectBtn.Checked)
+                {
+                    projs = true;
+                }
+                else
+                {
+                    projs = false;
+                }
                 RunFilter rf = new RunFilter();
                 rf.Execute(ids, pas, datas, andor, projs);
                 Close();
