@@ -38,6 +38,7 @@
             this.cancelBtn = new System.Windows.Forms.Button();
             this.viewBtn = new System.Windows.Forms.RadioButton();
             this.projectBtn = new System.Windows.Forms.RadioButton();
+            this.partialMatch = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // categoryBox
@@ -63,7 +64,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 117);
+            this.label2.Location = new System.Drawing.Point(13, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(129, 20);
             this.label2.TabIndex = 1;
@@ -73,7 +74,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 208);
+            this.label3.Location = new System.Drawing.Point(13, 166);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(100, 20);
             this.label3.TabIndex = 1;
@@ -82,27 +83,28 @@
             // paramText
             // 
             this.paramText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.paramText.Location = new System.Drawing.Point(12, 150);
+            this.paramText.Location = new System.Drawing.Point(12, 132);
             this.paramText.Name = "paramText";
             this.paramText.Size = new System.Drawing.Size(404, 26);
-            this.paramText.TabIndex = 2;
+            this.paramText.TabIndex = 1;
             // 
             // searchText
             // 
             this.searchText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchText.Location = new System.Drawing.Point(12, 240);
+            this.searchText.Location = new System.Drawing.Point(12, 198);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(404, 26);
             this.searchText.TabIndex = 2;
+            this.searchText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.searchText_KeyDown);
             // 
             // searchBtn
             // 
             this.searchBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.searchBtn.Location = new System.Drawing.Point(12, 301);
+            this.searchBtn.Location = new System.Drawing.Point(12, 261);
             this.searchBtn.Name = "searchBtn";
             this.searchBtn.Size = new System.Drawing.Size(101, 51);
-            this.searchBtn.TabIndex = 3;
+            this.searchBtn.TabIndex = 5;
             this.searchBtn.Text = "Search";
             this.searchBtn.UseVisualStyleBackColor = true;
             this.searchBtn.Click += new System.EventHandler(this.searchBtn_Click);
@@ -110,46 +112,62 @@
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelBtn.Location = new System.Drawing.Point(315, 301);
+            this.cancelBtn.Location = new System.Drawing.Point(315, 261);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(101, 51);
-            this.cancelBtn.TabIndex = 3;
-            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.TabIndex = 6;
+            this.cancelBtn.Text = "Close";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // viewBtn
             // 
-            this.viewBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.viewBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.viewBtn.AutoSize = true;
             this.viewBtn.Checked = true;
-            this.viewBtn.Location = new System.Drawing.Point(139, 301);
+            this.viewBtn.Location = new System.Drawing.Point(136, 261);
             this.viewBtn.Name = "viewBtn";
             this.viewBtn.Size = new System.Drawing.Size(103, 24);
-            this.viewBtn.TabIndex = 4;
+            this.viewBtn.TabIndex = 3;
             this.viewBtn.TabStop = true;
             this.viewBtn.Text = "View Only";
             this.viewBtn.UseVisualStyleBackColor = true;
+            this.viewBtn.KeyDown += new System.Windows.Forms.KeyEventHandler(this.viewBtn_KeyDown);
             // 
             // projectBtn
             // 
-            this.projectBtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.projectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.projectBtn.AutoSize = true;
-            this.projectBtn.Location = new System.Drawing.Point(139, 328);
+            this.projectBtn.Location = new System.Drawing.Point(136, 291);
             this.projectBtn.Name = "projectBtn";
             this.projectBtn.Size = new System.Drawing.Size(129, 24);
-            this.projectBtn.TabIndex = 4;
+            this.projectBtn.TabIndex = 11;
             this.projectBtn.Text = "Entire Project";
             this.projectBtn.UseVisualStyleBackColor = true;
+            // 
+            // partialMatch
+            // 
+            this.partialMatch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.partialMatch.AutoSize = true;
+            this.partialMatch.Location = new System.Drawing.Point(12, 336);
+            this.partialMatch.Name = "partialMatch";
+            this.partialMatch.Size = new System.Drawing.Size(204, 24);
+            this.partialMatch.TabIndex = 4;
+            this.partialMatch.Text = "Search for partial match";
+            this.partialMatch.UseVisualStyleBackColor = true;
+            this.partialMatch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.partialMatch_KeyDown);
             // 
             // ParameterSearcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(428, 364);
+            this.ClientSize = new System.Drawing.Size(428, 384);
             this.ControlBox = false;
-            this.Controls.Add(this.projectBtn);
             this.Controls.Add(this.viewBtn);
+            this.Controls.Add(this.projectBtn);
+            this.Controls.Add(this.partialMatch);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.searchBtn);
             this.Controls.Add(this.searchText);
@@ -158,11 +176,13 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.categoryBox);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(450, 420);
+            this.MinimumSize = new System.Drawing.Size(450, 440);
             this.Name = "ParameterSearcher";
             this.Text = "Parameter Searcher";
             this.TopMost = true;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ParameterSearcher_KeyDown_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,5 +200,6 @@
         private System.Windows.Forms.Button cancelBtn;
         private System.Windows.Forms.RadioButton viewBtn;
         private System.Windows.Forms.RadioButton projectBtn;
+        private System.Windows.Forms.CheckBox partialMatch;
     }
 }

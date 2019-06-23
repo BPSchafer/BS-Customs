@@ -92,9 +92,8 @@ namespace BIMtrovert.BS_Customs
                             ElementId id = hasPicked.ElementId;
                             Element el = ui_doc.Document.GetElement(id);
                             ParameterSet parameterSet = el.Parameters;
-
                             ParameterSelector ps = new ParameterSelector(parameterSet, commandData, id, false);
-                            ps.Show();
+                            ps.ShowDialog();
                         }
 
                         return TransactionStatus.Committed ==

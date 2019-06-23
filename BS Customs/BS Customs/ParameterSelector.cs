@@ -60,8 +60,11 @@ namespace BIMtrovert.BS_Customs
                 }
             }
 
+            
+
             List<Par> paramList = parList.OrderBy(o => o.Name).ToList();
-            checksParam.DataSource = paramList;
+            IList<Par> distinctPar = paramList.Distinct().ToList();
+            checksParam.DataSource = distinctPar;
             checksParam.ValueMember = "ID";
             checksParam.DisplayMember = "Name";
 
@@ -106,11 +109,35 @@ namespace BIMtrovert.BS_Customs
         {
             this.Close();
         }
+
+        private void checksParam_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                filterButton.PerformClick();
+            }
+        }
     }
 
-    public class Par
+    public class Par : IEquatable<Par>
     {
         public Parameter ID { get; set; }
         public string Name { get; set; }
+
+        public bool Equals(Par other)
+        {
+            if (Object.ReferenceEquals(other, null)) return false;
+
+            if (Object.ReferenceEquals(this, other)) return true;
+
+            return Name.Equals(other.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashParName = Name == null ? 0 : Name.GetHashCode();
+
+            return hashParName;
+        }
     }
 }

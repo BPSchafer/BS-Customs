@@ -57,10 +57,10 @@
             this.filterBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.filterBox.Controls.Add(this.orRadio);
             this.filterBox.Controls.Add(this.andRadio);
-            this.filterBox.Location = new System.Drawing.Point(358, 12);
+            this.filterBox.Location = new System.Drawing.Point(608, 12);
             this.filterBox.Name = "filterBox";
             this.filterBox.Size = new System.Drawing.Size(108, 89);
-            this.filterBox.TabIndex = 2;
+            this.filterBox.TabIndex = 1;
             this.filterBox.TabStop = false;
             this.filterBox.Text = "Filter Type";
             // 
@@ -97,8 +97,9 @@
             this.checksParam.FormattingEnabled = true;
             this.checksParam.Location = new System.Drawing.Point(0, 123);
             this.checksParam.Name = "checksParam";
-            this.checksParam.Size = new System.Drawing.Size(478, 554);
-            this.checksParam.TabIndex = 1;
+            this.checksParam.Size = new System.Drawing.Size(728, 554);
+            this.checksParam.TabIndex = 0;
+            this.checksParam.KeyDown += new System.Windows.Forms.KeyEventHandler(this.checksParam_KeyDown);
             // 
             // CancelBtn
             // 
@@ -115,10 +116,10 @@
             this.selectionGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.selectionGroup.Controls.Add(this.projectBtn);
             this.selectionGroup.Controls.Add(this.viewBtn);
-            this.selectionGroup.Location = new System.Drawing.Point(244, 12);
+            this.selectionGroup.Location = new System.Drawing.Point(494, 12);
             this.selectionGroup.Name = "selectionGroup";
             this.selectionGroup.Size = new System.Drawing.Size(108, 89);
-            this.selectionGroup.TabIndex = 3;
+            this.selectionGroup.TabIndex = 2;
             this.selectionGroup.TabStop = false;
             this.selectionGroup.Text = "Selection";
             // 
@@ -148,7 +149,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 694);
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ClientSize = new System.Drawing.Size(728, 728);
             this.ControlBox = false;
             this.Controls.Add(this.selectionGroup);
             this.Controls.Add(this.CancelBtn);
@@ -158,7 +160,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(500, 750);
+            this.MinimumSize = new System.Drawing.Size(750, 750);
             this.Name = "ParameterSelector";
             this.Text = "Parameter Selector";
             this.TopMost = true;
