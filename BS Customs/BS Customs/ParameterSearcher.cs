@@ -256,10 +256,5 @@ namespace BIMtrovert.BS_Customs
         }
     }
 
-    public class Cat
-    {
-        public Category ID { get; set; }
-        public string Name { get; set; }
-    }
 }
 

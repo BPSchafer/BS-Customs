@@ -91,10 +91,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cat.cs" />
     <Compile Include="ExternalApplication.cs" />
     <Compile Include="ExternalCommandAvailability.cs" />
     <Compile Include="ExternalCommand.cs" />
     <Compile Include="ExternalCommand_Work.cs" />
+    <Compile Include="Par.cs" />
     <Compile Include="ParameterSearcher.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,9 +124,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="RunFilter.cs" />
+    <Compile Include="SearchByCategories.cs" />
+    <Compile Include="SearchByCategoriesAvailability.cs" />
+    <Compile Include="SearchByCategories_Work.cs" />
+    <Compile Include="SearchByCategoryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SearchByCategoryForm.Designer.cs">
+      <DependentUpon>SearchByCategoryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectAllElementsInLink.cs" />
     <Compile Include="SelectAllElementsInLinkAvailability.cs" />
     <Compile Include="SelectAllElementsInLink_Work.cs" />
+    <Compile Include="SelectCategoriesElements.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExternalApplication.resx">
@@ -154,11 +166,26 @@
     <EmbeddedResource Include="RunFilter.ru.resx">
       <DependentUpon>RunFilter.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SearchByCategories.resx">
+      <DependentUpon>SearchByCategories.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchByCategoriesAvailability.resx">
+      <DependentUpon>SearchByCategoriesAvailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SearchByCategoryForm.resx">
+      <DependentUpon>SearchByCategoryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SelectAllElementsInLink.resx">
       <DependentUpon>SelectAllElementsInLink.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SelectAllElementsInLinkAvailability.resx">
       <DependentUpon>SelectAllElementsInLinkAvailability.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectCategoriesElements.resx">
+      <DependentUpon>SelectCategoriesElements.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SelectCategoriesElements.ru.resx">
+      <DependentUpon>SelectCategoriesElements.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +199,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BS Customs.addin" />
+    <None Include="Resources\Category.png" />
     <None Include="Resources\SearchParameter.png" />
     <None Include="Resources\Copy-04-WF.png" />
     <None Include="Resources\Magnifying-Glass.png" />

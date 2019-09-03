@@ -119,25 +119,4 @@ namespace BIMtrovert.BS_Customs
         }
     }
 
-    public class Par : IEquatable<Par>
-    {
-        public Parameter ID { get; set; }
-        public string Name { get; set; }
-
-        public bool Equals(Par other)
-        {
-            if (Object.ReferenceEquals(other, null)) return false;
-
-            if (Object.ReferenceEquals(this, other)) return true;
-
-            return Name.Equals(other.Name);
-        }
-
-        public override int GetHashCode()
-        {
-            int hashParName = Name == null ? 0 : Name.GetHashCode();
-
-            return hashParName;
-        }
-    }
 }
