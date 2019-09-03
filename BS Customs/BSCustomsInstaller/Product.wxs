@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><?define BS Customs_TargetDir=$(var.BS Customs.TargetDir)?>
-	<Product Id="*" Name="BS Customs" Language="1033" Version="1.0.3.0" Manufacturer="BIMtrovert" UpgradeCode="e28ab803-6afb-4392-85b4-a11dfb2ec3b6">
+	<Product Id="df7cd81a-30e7-4840-8097-69ed5d020e19" Name="BS Customs" Language="1033" Version="1.3.0.0" Manufacturer="BIMtrovert" UpgradeCode="e28ab803-6afb-4392-85b4-a11dfb2ec3b6">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
